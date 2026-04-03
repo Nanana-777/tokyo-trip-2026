@@ -187,19 +187,29 @@
 
         <!-- FOOD (美食推薦) -->
         <section id="food" class="tab-content">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center justify-between mb-4">
                 <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block">附近美食</h2>
                 <button onclick="getNearbyFood()" class="text-[10px] bg-ramune text-white px-3 py-2 rounded-full font-bold shadow-md">
-                    <i class="fa-solid fa-location-crosshairs mr-1"></i> 尋找好評餐廳
+                    <i class="fa-solid fa-location-crosshairs mr-1"></i> 自動定位
                 </button>
             </div>
+
+            <!-- 手動搜尋區域 (定位失敗的備案) -->
+            <div class="mb-6 flex gap-2">
+                <input type="text" id="manual-location" placeholder="或手動輸入地點 (如：上野站)" class="flex-1 bg-white border border-ramune/20 rounded-xl px-4 py-2 text-xs">
+                <button onclick="getFoodManual()" class="bg-ramune/20 text-ramune px-4 py-2 rounded-xl text-[10px] font-bold">搜尋</button>
+            </div>
+
             <div id="food-status" class="mb-4 hidden">
                 <div class="bg-accent/50 p-4 rounded-xl flex items-center gap-3 loading-pulse text-[10px] text-ramune font-bold">
-                    <i class="fa-solid fa-utensils"></i> <span id="status-text">定位中...</span>
+                    <i class="fa-solid fa-utensils"></i> <span id="status-text">分析中...</span>
                 </div>
             </div>
             <div id="food-results" class="space-y-4">
-                <div class="text-center py-20 text-earth/40 text-sm italic">點擊上方按鈕，尋找 10 分鐘內的好評餐廳</div>
+                <div class="text-center py-10 text-earth/40 text-xs leading-relaxed">
+                    <p>點擊「自動定位」或「手動輸入」</p>
+                    <p class="mt-1 opacity-60">(註：預覽環境可能限制定位權限)</p>
+                </div>
             </div>
         </section>
 
@@ -290,27 +300,71 @@
         // --- 美食推薦 (Geolocation + AI 知識) ---
         async function getNearbyFood() {
             const statusDiv = document.getElementById('food-status');
+            const statusText = document.getElementById('status-text');
             const resultsDiv = document.getElementById('food-results');
+            
             statusDiv.classList.remove('hidden');
-            if (!navigator.geolocation) { showToast("不支援定位"); return; }
+            statusText.innerText = "正在取得您的定位...";
+
+            if (!navigator.geolocation) { 
+                showToast("瀏覽器不支援定位"); 
+                statusDiv.classList.add('hidden');
+                return; 
+            }
+
+            // 使用較寬鬆的定位設定提高成功率
+            const options = {
+                enableHighAccuracy: false, // 關閉高精準度以減少失敗
+                timeout: 8000,             // 8秒超時
+                maximumAge: 60000          // 允許一分鐘內的舊定位
+            };
 
             navigator.geolocation.getCurrentPosition(async (pos) => {
-                document.getElementById('status-text').innerText = "AI 正在分析附近知名好評餐廳...";
-                const prompt = `座標：${pos.coords.latitude}, ${pos.coords.longitude}。請根據您的知識，尋找該地區 800公尺內知名且 Google 評分 4.0 以上的 5 間餐廳。以 JSON 回傳陣列 { "restaurants": [{ "name", "rating", "cuisine", "distance", "reason", "address" }] }。`;
-                try {
-                    const result = await callGemini({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
-                    const data = JSON.parse(result.candidates[0].content.parts[0].text);
-                    resultsDiv.innerHTML = data.restaurants.map(r => `
-                        <div class="bg-white p-4 rounded-2xl custom-shadow border border-ramune/10 relative">
-                            <span class="absolute top-0 right-0 bg-ramune/10 text-ramune px-3 py-1 rounded-bl-xl font-bold text-[10px]">★ ${r.rating}</span>
-                            <h4 class="font-bold text-sm mb-1">${r.name}</h4>
-                            <p class="text-[10px] text-earth mb-2">${r.cuisine} • ${r.distance}</p>
-                            <p class="text-[10px] italic text-earth mb-3">「${r.reason}」</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}" target="_blank" class="block text-center bg-ramune text-white py-2 rounded-xl text-[10px] font-bold">查看地圖位置</a>
-                        </div>`).join('');
-                    statusDiv.classList.add('hidden');
-                } catch (e) { resultsDiv.innerHTML = `<p class="text-center text-xs py-10">搜尋失敗</p>`; statusDiv.classList.add('hidden'); }
-            }, () => { showToast("定位失敗"); statusDiv.classList.add('hidden'); });
+                statusText.innerText = "AI 正在分析附近好評餐廳...";
+                const prompt = `座標：${pos.coords.latitude}, ${pos.coords.longitude}。請根據您的知識，尋找該地區 800公尺內知名且 Google 評分 4.0 以上的 5 間餐廳。以 JSON 回傳陣列 { "restaurants": [{ "name", "rating", "cuisine", "distance", "reason", "address" }] }。請使用繁體中文回傳。`;
+                await fetchAndRenderFood(prompt);
+                statusDiv.classList.add('hidden');
+            }, (err) => { 
+                console.error(err);
+                let errMsg = "定位失敗";
+                if (err.code === 1) errMsg = "請授權定位權限";
+                if (err.code === 3) errMsg = "定位超時，請再試一次";
+                showToast(errMsg); 
+                statusText.innerText = errMsg + "。請嘗試手動輸入地點。";
+                // 不自動隱藏 statusDiv，讓使用者看到錯誤說明
+            }, options);
+        }
+
+        async function getFoodManual() {
+            const loc = document.getElementById('manual-location').value.trim();
+            if (!loc) { showToast("請輸入地點"); return; }
+            
+            const statusDiv = document.getElementById('food-status');
+            const statusText = document.getElementById('status-text');
+            statusDiv.classList.remove('hidden');
+            statusText.innerText = `正在搜尋「${loc}」附近的 4.0+ 餐廳...`;
+
+            const prompt = `地點：${loc}。請根據您的知識，尋找該地區步行距離內知名且 Google 評分 4.0 以上的 5 間餐廳。以 JSON 回傳陣列 { "restaurants": [{ "name", "rating", "cuisine", "distance", "reason", "address" }] }。請使用繁體中文回傳。`;
+            await fetchAndRenderFood(prompt);
+            statusDiv.classList.add('hidden');
+        }
+
+        async function fetchAndRenderFood(prompt) {
+            const resultsDiv = document.getElementById('food-results');
+            try {
+                const result = await callGemini({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
+                const data = JSON.parse(result.candidates[0].content.parts[0].text);
+                resultsDiv.innerHTML = data.restaurants.map(r => `
+                    <div class="bg-white p-4 rounded-2xl custom-shadow border border-ramune/10 relative">
+                        <span class="absolute top-0 right-0 bg-ramune/10 text-ramune px-3 py-1 rounded-bl-xl font-bold text-[10px]">★ ${r.rating}</span>
+                        <h4 class="font-bold text-sm mb-1">${r.name}</h4>
+                        <p class="text-[10px] text-earth mb-2">${r.cuisine} • ${r.distance}</p>
+                        <p class="text-[10px] italic text-earth mb-3">「${r.reason}」</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name + ' ' + r.address)}" target="_blank" class="block text-center bg-ramune text-white py-2 rounded-xl text-[10px] font-bold">查看地圖位置</a>
+                    </div>`).join('');
+            } catch (e) { 
+                resultsDiv.innerHTML = `<p class="text-center text-xs py-10 text-red-400">AI 分析失敗，請稍後再試</p>`; 
+            }
         }
 
         // --- Day 6 AI 建議 ---
