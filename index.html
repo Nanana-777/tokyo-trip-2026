@@ -112,7 +112,7 @@
                     <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm text-xs">04</div>
                     <div class="bg-white p-5 rounded-2xl custom-shadow">
                         <h3 class="font-bold text-lg mb-1">Day 4 (9/6) 銀座</h3>
-                        <p class="text-xs text-earth mb-3">今日重點：購物、燒肉名店探索</p>
+                        <p class="text-xs text-earth mb-3">今日重點：購物、名店探索</p>
                         <button onclick="switchTab('food')" class="w-full border border-ramune text-ramune py-2 rounded-xl text-[10px] font-bold">
                             查看銀座餐廳清單
                         </button>
@@ -168,21 +168,21 @@
             <div class="sticky top-[72px] z-20 bg-muji/90 backdrop-blur-sm pb-4">
                 <div class="relative mb-3">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-ramune/50 text-xs"></i>
-                    <input type="text" id="food-search-input" placeholder="搜尋店名、分類或特色..." 
+                    <input type="text" id="food-search-input" placeholder="搜尋店名、分類、特色或招牌菜..." 
                         class="w-full bg-white border border-ramune/10 rounded-2xl pl-10 pr-4 py-3 text-sm shadow-sm focus:border-ramune transition-all"
                         onkeyup="runFilters()">
                 </div>
                 
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                     <button onclick="setFilterType('all')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune active shadow-sm" id="btn-all">全部</button>
-                    <button onclick="setFilterType('walkin')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm" id="btn-walkin">✨ Walk-in 高</button>
+                    <button onclick="setFilterType('walkin')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm" id="btn-walkin">✨ Walk-in 友好</button>
                     <button onclick="setFilterType('highscore')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm" id="btn-high">🔥 4.2分以上</button>
                 </div>
             </div>
             
             <div id="food-list-container" class="bg-white rounded-3xl custom-shadow overflow-hidden mb-8 min-h-[100px]">
                 <!-- CSV 資料將在此渲染 -->
-                <div class="p-10 text-center text-earth/40 text-xs italic">載入資料中...</div>
+                <div class="p-10 text-center text-earth/40 text-xs italic text-loading">載入資料中...</div>
             </div>
         </section>
 
@@ -282,13 +282,10 @@
     </button>
 
     <script>
-        // 核心資料庫 (若 CSV 載入失敗時的預設資料)
+        // 核心資料庫 (若 CSV 載入失敗時的預設範例資料)
         let allRestaurants = [
-            { name: "東京肉しゃぶ家 秀彬", rating: 4.2, booking: "必須預約", walkin: "極低", feature: "高端私房菜，主打頂級和牛涮涮鍋、黑松露壽喜燒。", type: "涮涮鍋, 壽喜燒" },
-            { name: "俺の焼肉 銀座4丁目", rating: 4.0, booking: "建議預約", walkin: "高", feature: "以極高 CP 值提供大量高品質 A5 和牛。", type: "燒肉" },
-            { name: "ALEGRIA GINZA", rating: 4.2, booking: "建議預約", walkin: "中", feature: "巴西烤肉吃到飽，店員桌邊現切 20 種肉類。", type: "燒肉" },
-            { name: "ぴょんぴょん舎 GINZA UNA", rating: 4.2, booking: "中", walkin: "高", feature: "盛岡冷麵與燒肉組合，景觀極佳。", type: "冷麵, 燒肉" },
-            { name: "いふう (Ifu)", rating: 3.8, booking: "中", walkin: "高", feature: "韓式五花肉與野菜吃到飽，百貨內便利。", type: "燒肉" }
+            { name: "東京肉しゃぶ家 秀彬", rating: "4.2 (44)", booking: "必須預約", walkin: "極低", feature: "高端私房菜，通常不接受直接入座。", dish: "頂級和牛涮涮鍋、黑松露壽喜燒。", type: "しゃぶしゃぶ, すき焼き, とんかつ" },
+            { name: "銀座かつかみ", rating: "4.3 (627)", booking: "強烈建議", walkin: "低", feature: "採「套餐制」，座位有限，沒預約很難有位。", dish: "炸豬排品嚐套餐 (Katsu Course)。", type: "とんかつ" }
         ];
 
         let currentFilterType = 'all';
@@ -296,24 +293,22 @@
         // 載入 CSV (GitHub restaurants.csv)
         async function loadRestaurants() {
             try {
+                // 為了開發預覽，先嘗試讀取。若在本地或 GitHub Pages，請確保路徑正確
                 const response = await fetch('./restaurants.csv');
-                if (!response.ok) throw new Error();
+                if (!response.ok) throw new Error('CSV file not found');
                 const csvText = await response.text();
                 Papa.parse(csvText, {
                     header: true,
                     skipEmptyLines: true,
                     complete: function(results) {
                         if (results.data && results.data.length > 0) {
-                            allRestaurants = results.data.map(item => ({
-                                ...item,
-                                rating: parseFloat(item.rating) || 0
-                            }));
+                            allRestaurants = results.data;
                         }
                         renderFood(allRestaurants);
                     }
                 });
             } catch (e) {
-                // 如果找不到 CSV，則直接顯示內建預設資料
+                console.warn("Using default data because CSV could not be loaded:", e.message);
                 renderFood(allRestaurants);
             }
         }
@@ -332,15 +327,18 @@
             let filtered = allRestaurants;
             
             if (currentFilterType === 'walkin') {
-                filtered = filtered.filter(i => i.walkin === "高" || i.walkin === "極高");
+                // 根據您的資料，Walk-in 友好度為「中」或以上視為較友好
+                filtered = filtered.filter(i => (i.walkin && (i.walkin.includes('高') || i.walkin.includes('中'))));
             } else if (currentFilterType === 'highscore') {
-                filtered = filtered.filter(i => i.rating >= 4.2);
+                // 解析評分數字 (如 "4.2 (44)" -> 4.2)
+                filtered = filtered.filter(i => parseFloat(i.rating) >= 4.2);
             }
             
             if (query) {
                 filtered = filtered.filter(i => 
                     (i.name && i.name.toLowerCase().includes(query)) || 
                     (i.feature && i.feature.toLowerCase().includes(query)) ||
+                    (i.dish && i.dish.toLowerCase().includes(query)) ||
                     (i.type && i.type.toLowerCase().includes(query))
                 );
             }
@@ -363,10 +361,11 @@
                             <h4 class="font-bold text-sm text-earth truncate">${item.name || '未命名'}</h4>
                             <span class="text-[9px] font-bold text-orange-400 bg-orange-50 px-1 py-0.5 rounded">★${item.rating || '0'}</span>
                         </div>
-                        <p class="text-[10px] text-earth/60 truncate mb-1.5 leading-relaxed">${item.feature || ''}</p>
+                        <p class="text-[10px] text-earth/60 truncate mb-1 leading-relaxed">${item.feature || ''}</p>
+                        <p class="text-[10px] text-ramune font-bold truncate mb-1.5"><i class="fa-solid fa-star text-[8px]"></i> ${item.dish || ''}</p>
                         <div class="flex flex-wrap gap-2">
                             <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-muji text-earth border border-muji">預約: ${item.booking || '未知'}</span>
-                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${(item.walkin && item.walkin.includes('高')) ? 'bg-green-50 text-green-500' : 'bg-orange-50 text-orange-500'}">Walk-in: ${item.walkin || '未知'}</span>
+                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${(item.walkin && (item.walkin.includes('高') || item.walkin.includes('中'))) ? 'bg-green-50 text-green-500' : 'bg-orange-50 text-orange-500'}">Walk-in: ${item.walkin || '未知'}</span>
                         </div>
                     </div>
                     <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.name || '') + ' 東京')}" target="_blank" class="w-9 h-9 flex items-center justify-center bg-ramune/10 text-ramune rounded-full shrink-0">
@@ -457,6 +456,7 @@
         let checks = JSON.parse(localStorage.getItem('travel_checklist') || '{}');
         function renderChecklist() {
             const container = document.getElementById('checklist-container');
+            if(!container) return;
             container.innerHTML = checklistItems.map((item, idx) => `
                 <div class="flex items-center gap-3 active:opacity-70 transition-opacity">
                     <input type="checkbox" id="c-${idx}" ${checks[idx]?'checked':''} onchange="toggleCheck(${idx})" class="w-5 h-5 rounded-full border-ramune text-ramune focus:ring-ramune">
@@ -478,7 +478,8 @@
         }
         function renderMemo() {
             const text = localStorage.getItem('travel_memo') || "";
-            document.getElementById('memo-input').value = text;
+            const el = document.getElementById('memo-input');
+            if (el) el.value = text;
         }
 
         // 初始化
