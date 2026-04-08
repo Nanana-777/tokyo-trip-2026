@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>東京漫遊之旅 | Travel Handbook</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
+    <!-- 引入 PapaParse 用於解析 CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <script>
@@ -16,15 +15,12 @@
             theme: {
                 extend: {
                     colors: {
-                        ramune: '#A2D2E2',      /* 波子汽水藍 */
-                        muji: '#F5F5F5',        /* 無印白灰 */
-                        earth: '#7F7F7F',       /* 中性灰 */
-                        accent: '#E8F3F6'       /* 淡藍色背景 */
+                        ramune: '#A2D2E2',
+                        muji: '#F5F5F5',
+                        earth: '#7F7F7F',
+                        accent: '#E8F3F6'
                     },
-                    fontFamily: {
-                        sans: ['M PLUS Rounded 1c', 'Noto Sans TC', 'sans-serif'],
-                    },
-                    borderRadius: { 'xl': '1rem', '2xl': '1.5rem' }
+                    fontFamily: { sans: ['M PLUS Rounded 1c', 'Noto Sans TC', 'sans-serif'] }
                 }
             }
         }
@@ -34,26 +30,21 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .bottom-nav-item.active { color: #A2D2E2; }
+        .filter-btn.active { background-color: #A2D2E2; color: white; border-color: #A2D2E2; }
         .custom-shadow { box-shadow: 0 4px 15px rgba(162, 210, 226, 0.15); }
-        .timeline-line::before {
-            content: ''; position: absolute; left: 19px; top: 0; bottom: 0; width: 2px;
-            background: #A2D2E2; opacity: 0.4;
-        }
-        .loading-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-24 font-sans">
+<body class="pb-24 font-sans no-scrollbar">
 
     <!-- Header -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-ramune/20 px-6 py-4 flex justify-between items-center">
         <div>
-            <h1 class="text-xl font-bold tracking-wider text-ramune">TOKYO 2024</h1>
-            <p class="text-xs text-earth">5/6 - 12/6 Travel Log</p>
+            <h1 class="text-xl font-bold tracking-wider text-ramune uppercase">Tokyo Travel</h1>
+            <p class="text-[10px] text-earth">2024 Handbook</p>
         </div>
-        <div class="w-10 h-10 bg-ramune rounded-full flex items-center justify-center text-white custom-shadow">
-            <i class="fa-solid fa-plane-departure"></i>
+        <div class="w-10 h-10 bg-ramune rounded-full flex items-center justify-center text-white shadow-lg shadow-ramune/20">
+            <i class="fa-solid fa-utensils"></i>
         </div>
     </header>
 
@@ -61,365 +52,223 @@
         
         <!-- PLAN (行程表) -->
         <section id="plan" class="tab-content active">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6">行程規劃</h2>
-
-            <!-- 航班卡片 -->
-            <div class="bg-white rounded-2xl p-4 mb-8 custom-shadow border border-ramune/10">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] bg-ramune text-white px-2 py-0.5 rounded font-bold">ZG21</span>
-                    <span class="text-[10px] text-earth uppercase tracking-widest">YVR ➔ NRT</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <div class="text-center">
-                        <p class="text-xl font-bold">10:30 AM</p>
-                        <p class="text-[10px] text-earth">5/6 YVR</p>
-                    </div>
-                    <div class="flex-1 px-4 flex flex-col items-center">
-                        <i class="fa-solid fa-plane text-ramune text-sm"></i>
-                        <div class="w-full h-px bg-ramune/30 relative mt-1"></div>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-xl font-bold">12:40 PM</p>
-                        <p class="text-[10px] text-earth">6/6 NRT</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 每日行程 -->
-            <div class="relative timeline-line space-y-8">
-                <!-- Day 1 -->
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">01</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <div class="flex justify-between mb-2">
-                            <h3 class="font-bold text-lg">Day 1 (6/6)</h3>
-                            <span class="text-[10px] bg-muji px-2 py-1 rounded">上野</span>
-                        </div>
-                        <ul class="text-sm space-y-2 text-earth">
-                            <li><span class="font-bold text-ramune mr-2">16:00</span>抵達成田，搭 Skyliner 前往上野</li>
-                            <li><span class="font-bold text-ramune mr-2">住宿</span>上野三井花園酒店</li>
-                            <li><span class="font-bold text-ramune mr-2">晚上</span>阿美橫丁藥妝、3COINS、ABC-MART</li>
-                        </ul>
-                        <a href="https://www.google.com/maps/dir/Narita+Airport/Mitsui+Garden+Hotel+Ueno" target="_blank" class="mt-4 block text-center text-[10px] bg-ramune text-white py-2.5 rounded-xl font-bold shadow-sm">
-                            <i class="fa-solid fa-location-arrow mr-1"></i> 開啟 Google Maps 導航
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Day 2 -->
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">02</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <h3 class="font-bold text-lg mb-2">Day 2 (6/7)</h3>
-                        <p class="text-xs text-ramune font-bold mb-3">美術館與合羽橋之行</p>
-                        <ul class="text-sm space-y-2 text-earth">
-                            <li>• 上野之森美術館 (梵谷展)</li>
-                            <li>• 國立西洋美術館 (冨嶽三十六景)</li>
-                            <li>• 合羽橋道具街「つば屋」買廚刀</li>
-                            <li>• 淺草寺、上野 UNIQLO & GU</li>
-                        </ul>
-                        <a href="https://www.google.com/maps/dir/The+Ueno+Royal+Museum/Kappabashi+Dougu-gai/Senso-ji" target="_blank" class="mt-4 block text-center text-[10px] bg-ramune text-white py-2.5 rounded-xl font-bold shadow-sm">
-                            <i class="fa-solid fa-route mr-1"></i> 查看今日完整路線
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Day 3 -->
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">03</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <h3 class="font-bold text-lg mb-2 text-orange-400">Day 3 (8/6) 熱海</h3>
-                        <ul class="text-sm space-y-2 text-earth">
-                            <li><span class="font-bold">移動</span>上野至熱海 (新幹線/JR)</li>
-                            <li><span class="font-bold">住宿</span>熱海 LA VISTA</li>
-                            <li><span class="font-bold">行程</span>熱海站前商店街巡禮</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Day 4 -->
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">04</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <h3 class="font-bold text-lg mb-2">Day 4 (9/6) 銀座</h3>
-                        <p class="text-xs text-earth mb-3 font-medium">移動至新橋 CANDEO</p>
-                        <div class="flex flex-wrap gap-1.5 text-earth">
-                            <span class="text-[10px] bg-accent px-2 py-1 rounded">無印良品</span>
-                            <span class="text-[10px] bg-accent px-2 py-1 rounded">LOFT</span>
-                            <span class="text-[10px] bg-accent px-2 py-1 rounded">伊東屋</span>
-                            <span class="text-[10px] bg-accent px-2 py-1 rounded">三越茅乃舍</span>
-                            <span class="text-[10px] bg-accent px-2 py-1 rounded">Wacoal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Day 5 -->
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">05</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <h3 class="font-bold text-lg mb-2 text-ramune">Day 5 (10/6) 澀谷</h3>
-                        <p class="text-xs text-earth">新宿/澀谷女裝與時尚採買</p>
-                    </div>
-                </div>
-
-                <!-- Day 6 (AI 行程建議) -->
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">06</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow border-2 border-dashed border-muji">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-bold text-lg">Day 6 (11/6)</h3>
-                            <button onclick="generateDay6Suggestion()" class="text-[10px] bg-ramune text-white px-3 py-1 rounded-full font-bold">✨ AI 規劃</button>
-                        </div>
-                        <div id="day6-content" class="text-xs text-earth italic text-center py-2">點擊按鈕，由 AI 為您量身打造行程</div>
-                    </div>
-                </div>
-
-                <!-- Day 7 -->
-                <div class="relative pl-12 pb-4">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm">07</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow border-t-4 border-red-300">
-                        <h3 class="font-bold text-lg mb-2">Day 7 (12/6) 歸途</h3>
-                        <p class="text-sm"><span class="font-bold text-red-400 mr-2">12:30</span>前往成田機場返家</p>
-                    </div>
-                </div>
+            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">行程規劃</h2>
+            <div class="bg-white p-5 rounded-2xl custom-shadow mb-4">
+                <p class="text-sm font-bold text-ramune mb-1">Day 4 銀座探索</p>
+                <p class="text-xs text-earth">今日晚餐建議從美食分頁挑選燒肉名店。</p>
+                <button onclick="switchTab('food')" class="mt-3 w-full bg-ramune/10 text-ramune py-2 rounded-xl text-xs font-bold">開啟美食篩選器</button>
             </div>
         </section>
 
-        <!-- FOOD (美食推薦) -->
+        <!-- ATAMI (熱海專題) -->
+        <section id="atami" class="tab-content">
+            <h2 class="text-2xl font-bold border-b-4 border-orange-300 inline-block mb-6 text-earth">熱海專題</h2>
+            <div class="bg-white p-5 rounded-2xl custom-shadow">
+                <p class="text-sm font-bold text-orange-400">熱海 LA VISTA</p>
+                <p class="text-xs text-earth">望海風呂、大正浪漫風。</p>
+            </div>
+        </section>
+
+        <!-- FOOD (美食清單) -->
         <section id="food" class="tab-content">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block">附近美食</h2>
-                <button onclick="getNearbyFood()" class="text-[10px] bg-ramune text-white px-3 py-2 rounded-full font-bold shadow-md">
-                    <i class="fa-solid fa-location-crosshairs mr-1"></i> 自動定位
-                </button>
-            </div>
-
-            <!-- 手動搜尋區域 (定位失敗的備案) -->
-            <div class="mb-6 flex gap-2">
-                <input type="text" id="manual-location" placeholder="或手動輸入地點 (如：上野站)" class="flex-1 bg-white border border-ramune/20 rounded-xl px-4 py-2 text-xs">
-                <button onclick="getFoodManual()" class="bg-ramune/20 text-ramune px-4 py-2 rounded-xl text-[10px] font-bold">搜尋</button>
-            </div>
-
-            <div id="food-status" class="mb-4 hidden">
-                <div class="bg-accent/50 p-4 rounded-xl flex items-center gap-3 loading-pulse text-[10px] text-ramune font-bold">
-                    <i class="fa-solid fa-utensils"></i> <span id="status-text">分析中...</span>
+                <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block text-earth">美食篩選</h2>
+                <div class="flex flex-col items-end">
+                    <span id="food-count" class="text-[10px] text-earth font-bold bg-white px-2 py-1 rounded-full border border-ramune/20 shadow-sm">0 項目</span>
+                    <span id="data-source" class="text-[8px] text-earth/40 mt-1">載入中...</span>
                 </div>
             </div>
-            <div id="food-results" class="space-y-4">
-                <div class="text-center py-10 text-earth/40 text-xs leading-relaxed">
-                    <p>點擊「自動定位」或「手動輸入」</p>
-                    <p class="mt-1 opacity-60">(註：預覽環境可能限制定位權限)</p>
+            
+            <div class="sticky top-[72px] z-20 bg-muji/90 backdrop-blur-sm pb-4">
+                <div class="relative mb-3">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-ramune/50 text-xs"></i>
+                    <input type="text" id="food-search-input" placeholder="搜尋店名或特色..." 
+                        class="w-full bg-white border border-ramune/10 rounded-2xl pl-10 pr-4 py-3 text-sm shadow-sm focus:border-ramune transition-all"
+                        onkeyup="runFilters()">
                 </div>
+                
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                    <button onclick="setFilterType('all')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune active shadow-sm transition-all" id="btn-all">全部</button>
+                    <button onclick="setFilterType('walkin')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm transition-all" id="btn-walkin">✨ Walk-in 友好</button>
+                    <button onclick="setFilterType('highscore')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm transition-all" id="btn-high">🔥 高分推薦</button>
+                </div>
+            </div>
+            
+            <div id="food-list-container" class="bg-white rounded-3xl custom-shadow overflow-hidden mb-8 min-h-[100px]">
+                <!-- 餐廳列將在此處渲染 -->
+            </div>
+
+            <div id="no-food-results" class="hidden text-center py-20 text-earth/50">
+                <i class="fa-solid fa-filter-circle-xmark text-4xl mb-4 opacity-20"></i>
+                <p class="text-sm italic">沒有符合條件的餐廳...</p>
             </div>
         </section>
 
-        <!-- WALLET (記帳與匯率) -->
+        <!-- WALLET (記帳) -->
         <section id="wallet" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6">旅遊帳本</h2>
-            <div class="bg-white p-5 rounded-3xl custom-shadow mb-8">
-                <div class="flex justify-between mb-4">
-                    <h3 class="font-bold text-sm">匯率換算 (0.21)</h3>
-                    <button id="ai-scan-btn" onclick="scanReceiptWithAI()" class="hidden text-[10px] bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full font-bold">✨ AI 辨識收據</button>
-                </div>
-                <div class="flex gap-2">
-                    <input type="text" id="calc-input" placeholder="日幣算式 (如 500+200)" class="flex-1 bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                    <button onclick="calculateRate()" class="bg-ramune text-white w-12 rounded-xl flex items-center justify-center"><i class="fa-solid fa-equals"></i></button>
-                </div>
-                <div id="calc-result" class="mt-4 text-center hidden"><p class="text-xl font-bold text-ramune">NT$ <span id="twd-result">0</span></p></div>
-            </div>
-            <!-- Expense Form -->
-            <div class="bg-white p-5 rounded-3xl custom-shadow mb-8 border border-ramune/5">
-                <h3 class="font-bold text-sm mb-4">新增支出</h3>
-                <div class="space-y-3">
-                    <input type="text" id="exp-item" placeholder="品項" class="w-full bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                    <input type="number" id="exp-amount" placeholder="日幣金額" class="w-full bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                    <div class="flex gap-2">
-                        <label class="flex-1 cursor-pointer bg-muji border-2 border-dashed border-ramune/30 rounded-xl py-3 text-center text-xs text-earth">
-                            <i class="fa-solid fa-camera mr-1"></i> <span id="photo-status">拍下收據</span>
-                            <input type="file" accept="image/*" class="hidden" onchange="handlePhoto(this)">
-                        </label>
-                        <button onclick="saveExpense()" class="bg-ramune text-white px-6 rounded-xl font-bold text-sm">儲存</button>
-                    </div>
-                </div>
-            </div>
+            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">旅遊帳本</h2>
             <div id="expense-list" class="space-y-4"></div>
         </section>
 
-        <!-- LISTS -->
+        <!-- LISTS (清單) -->
         <section id="lists" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6">備忘清單</h2>
-            <div id="checklist-container" class="bg-white p-6 rounded-3xl custom-shadow mb-8 space-y-3"></div>
-            <div class="bg-white p-6 rounded-3xl custom-shadow">
-                <h3 class="font-bold text-sm mb-4">個人備忘</h3>
-                <textarea id="memo-input" rows="4" class="w-full bg-muji border-none rounded-2xl px-4 py-3 text-sm mb-3"></textarea>
-                <button onclick="saveMemo()" class="w-full bg-ramune text-white py-3 rounded-xl font-bold">儲存</button>
-                <div id="memo-display" class="mt-4 text-xs text-earth whitespace-pre-wrap"></div>
-            </div>
+            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">清單備忘</h2>
+            <div id="checklist-container" class="space-y-3 mb-6"></div>
+            <textarea id="memo-input" class="w-full bg-white rounded-2xl p-4 text-sm border-none shadow-sm mb-2" rows="4" placeholder="在此輸入您的備忘錄..."></textarea>
+            <button onclick="saveMemo()" class="w-full bg-ramune text-white py-3 rounded-xl font-bold">儲存備忘</button>
+            <div id="memo-display" class="mt-4 p-4 text-[11px] text-earth whitespace-pre-wrap leading-relaxed"></div>
         </section>
 
-        <!-- INFO -->
+        <!-- INFO (資訊) -->
         <section id="info" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6">實用資訊</h2>
-            <div class="bg-white p-6 rounded-3xl custom-shadow mb-6">
-                <h3 class="font-bold mb-4 text-red-400">緊急聯絡</h3>
-                <div class="space-y-3 text-sm">
-                    <div class="flex justify-between"><span>警察局</span><span class="font-bold">110</span></div>
-                    <div class="flex justify-between"><span>救護車</span><span class="font-bold">119</span></div>
-                    <div class="flex justify-between"><span>外館辦事處</span><span class="font-bold">03-3280-7811</span></div>
-                </div>
+            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">實用資訊</h2>
+            <div class="bg-red-50 p-4 rounded-2xl border border-red-100 text-red-700 text-sm">
+                <p class="font-bold mb-2">緊急聯絡</p>
+                <div class="flex justify-between"><span>警察局</span><span class="font-bold">110</span></div>
             </div>
         </section>
     </main>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-ramune/20 px-4 py-3 flex justify-between items-center z-50">
-        <button onclick="switchTab('plan')" class="bottom-nav-item flex flex-col items-center gap-1 active"><i class="fa-solid fa-calendar-day text-lg"></i><span class="text-[10px] font-bold">行程</span></button>
-        <button onclick="switchTab('food')" class="bottom-nav-item flex flex-col items-center gap-1"><i class="fa-solid fa-bowl-food text-lg"></i><span class="text-[10px] font-bold">美食</span></button>
-        <button onclick="switchTab('wallet')" class="bottom-nav-item flex flex-col items-center gap-1"><i class="fa-solid fa-wallet text-lg"></i><span class="text-[10px] font-bold">記帳</span></button>
-        <button onclick="switchTab('lists')" class="bottom-nav-item flex flex-col items-center gap-1"><i class="fa-solid fa-list-check text-lg"></i><span class="text-[10px] font-bold">清單</span></button>
-        <button onclick="switchTab('info')" class="bottom-nav-item flex flex-col items-center gap-1"><i class="fa-solid fa-circle-info text-lg"></i><span class="text-[10px] font-bold">資訊</span></button>
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ramune/10 px-2 py-3 flex justify-between items-center z-50">
+        <button onclick="switchTab('plan')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1 active"><i class="fa-solid fa-calendar-day text-lg"></i><span class="text-[9px] font-bold">行程</span></button>
+        <button onclick="switchTab('atami')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-umbrella-beach text-lg"></i><span class="text-[9px] font-bold">熱海</span></button>
+        <button onclick="switchTab('food')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-utensils text-lg"></i><span class="text-[9px] font-bold">美食</span></button>
+        <button onclick="switchTab('wallet')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-wallet text-lg"></i><span class="text-[9px] font-bold">記帳</span></button>
+        <button onclick="switchTab('lists')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-list-check text-lg"></i><span class="text-[9px] font-bold">清單</span></button>
+        <button onclick="switchTab('info')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-circle-info text-lg"></i><span class="text-[9px] font-bold">資訊</span></button>
     </nav>
 
-    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-ramune text-white px-6 py-2 rounded-full text-xs font-bold shadow-lg opacity-0 transition-opacity pointer-events-none z-50"></div>
+    <!-- 置頂按鈕 -->
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="fixed bottom-24 right-5 w-10 h-10 bg-white border border-ramune/30 text-ramune rounded-full shadow-lg flex items-center justify-center z-40 opacity-80 active:scale-95 transition-all">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     <script>
-        const apiKey = ""; // API 密鑰由環境自動填入
+        // 預設餐廳資料庫 (當 CSV 讀取失敗時使用)
+        let allRestaurants = [
+            { name: "俺の焼肉 銀座4丁目", rating: 4.0, booking: "建議預約", walkin: "高", feature: "以極高 CP 值提供大量高品質 A5 和牛。", type: "燒肉" },
+            { name: "ALEGRIA GINZA", rating: 4.2, booking: "建議預約", walkin: "中", feature: "巴西烤肉吃到飽，店員桌邊現切 20 種肉類。", type: "燒肉" },
+            { name: "ぴょんぴょん舎 GINZA UNA", rating: 4.2, booking: "中", walkin: "高", feature: "盛岡冷麵與燒肉組合，景觀極佳。", type: "燒肉" },
+            { name: "いふう (Ifu)", rating: 3.8, booking: "中", walkin: "高", feature: "韓式五花肉與野菜吃到飽，百貨內便利。", type: "燒肉" },
+            { name: "銀座羊屋 はなれ", rating: 4.1, booking: "建議預約", walkin: "中", feature: "成吉思汗羊肉，使用澳洲空運生羔羊，完全沒有騷味。", type: "燒肉" },
+            { name: "生ラム焼肉 羊ロック", rating: 4.4, booking: "建議預約", walkin: "中", feature: "主打鮮嫩的生羔羊肉，氣氛熱鬧，深受女性歡迎。", type: "燒肉" },
+            { name: "KollaBo 銀座店", rating: 3.7, booking: "不需要", walkin: "極高", feature: "韓式料理集合店，提供燻製五花肉、醬蟹與各種燒肉。", type: "燒肉" },
+            { name: "釜めし大統領", rating: 4.2, booking: "不需要", walkin: "高", feature: "韓式石鍋拌飯與韓式定食，午餐熱門。", type: "午餐" },
+            { name: "焼肉 山水 銀座店", rating: 4.1, booking: "建議預約", walkin: "中", feature: "標榜「不冷凍」的生肉燒肉，強調肉質最原始的口感。", type: "燒肉" },
+            { name: "YAKINIKU A FIVE 徳", rating: 4.5, booking: "建議預約", walkin: "中", feature: "主打 A5 級和牛午餐吃到飽（部分時段），CP 值極高。", type: "午餐" },
+            { name: "焼肉 炙屋武蔵", rating: 4.1, booking: "建議預約", walkin: "中", feature: "提供極厚切牛舌與多樣化的和牛吃到飽選項。", type: "燒肉" },
+            { name: "焼肉とワイン 醍醐", rating: 4.0, booking: "建議預約", walkin: "中", feature: "紅酒配燒肉，酒單選擇極豐富。", type: "燒肉" }
+        ];
 
-        async function callGemini(payload, model = "gemini-2.5-flash-preview-09-2025") {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error('API Error');
-                    return await response.json();
-                } catch (e) { await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000)); }
+        let currentFilterType = 'all';
+
+        // 從 GitHub 上的 CSV 讀取資料
+        async function loadRestaurants() {
+            const sourceEl = document.getElementById('data-source');
+            try {
+                // 假設 CSV 檔案放在同一個 GitHub 倉庫目錄下
+                // 上傳到 GitHub Pages 後，路徑通常是 './restaurants.csv'
+                const response = await fetch('./restaurants.csv');
+                if (!response.ok) throw new Error('CSV not found');
+                
+                const csvText = await response.text();
+                
+                // 使用 PapaParse 解析
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (results.data && results.data.length > 0) {
+                            // 轉換評分為數字
+                            allRestaurants = results.data.map(item => ({
+                                ...item,
+                                rating: parseFloat(item.rating) || 0
+                            }));
+                            sourceEl.innerText = "資料來源：GitHub CSV";
+                            renderFood(allRestaurants);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.log("Using local fallback data.");
+                sourceEl.innerText = "資料來源：內建預設";
+                renderFood(allRestaurants);
             }
-            throw new Error('Retries failed');
         }
 
-        // --- 美食推薦 (Geolocation + AI 知識) ---
-        async function getNearbyFood() {
-            const statusDiv = document.getElementById('food-status');
-            const statusText = document.getElementById('status-text');
-            const resultsDiv = document.getElementById('food-results');
+        function setFilterType(type) {
+            currentFilterType = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if(type === 'all') document.getElementById('btn-all').classList.add('active');
+            if(type === 'walkin') document.getElementById('btn-walkin').classList.add('active');
+            if(type === 'highscore') document.getElementById('btn-high').classList.add('active');
+            runFilters();
+        }
+
+        function runFilters() {
+            const query = document.getElementById('food-search-input').value.toLowerCase();
+            let filtered = allRestaurants;
+
+            if (currentFilterType === 'walkin') {
+                filtered = filtered.filter(item => item.walkin === "高" || item.walkin === "極高");
+            } else if (currentFilterType === 'highscore') {
+                filtered = filtered.filter(item => item.rating >= 4.2);
+            }
+
+            if (query) {
+                filtered = filtered.filter(item => 
+                    (item.name && item.name.toLowerCase().includes(query)) || 
+                    (item.feature && item.feature.toLowerCase().includes(query))
+                );
+            }
+
+            renderFood(filtered);
+        }
+
+        function renderFood(data) {
+            const container = document.getElementById('food-list-container');
+            const countEl = document.getElementById('food-count');
+            const noResults = document.getElementById('no-food-results');
             
-            statusDiv.classList.remove('hidden');
-            statusText.innerText = "正在取得您的定位...";
-
-            if (!navigator.geolocation) { 
-                showToast("瀏覽器不支援定位"); 
-                statusDiv.classList.add('hidden');
-                return; 
-            }
-
-            // 使用較寬鬆的定位設定提高成功率
-            const options = {
-                enableHighAccuracy: false, // 關閉高精準度以減少失敗
-                timeout: 8000,             // 8秒超時
-                maximumAge: 60000          // 允許一分鐘內的舊定位
-            };
-
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                statusText.innerText = "AI 正在分析附近好評餐廳...";
-                const prompt = `座標：${pos.coords.latitude}, ${pos.coords.longitude}。請根據您的知識，尋找該地區 800公尺內知名且 Google 評分 4.0 以上的 5 間餐廳。以 JSON 回傳陣列 { "restaurants": [{ "name", "rating", "cuisine", "distance", "reason", "address" }] }。請使用繁體中文回傳。`;
-                await fetchAndRenderFood(prompt);
-                statusDiv.classList.add('hidden');
-            }, (err) => { 
-                console.error(err);
-                let errMsg = "定位失敗";
-                if (err.code === 1) errMsg = "請授權定位權限";
-                if (err.code === 3) errMsg = "定位超時，請再試一次";
-                showToast(errMsg); 
-                statusText.innerText = errMsg + "。請嘗試手動輸入地點。";
-                // 不自動隱藏 statusDiv，讓使用者看到錯誤說明
-            }, options);
-        }
-
-        async function getFoodManual() {
-            const loc = document.getElementById('manual-location').value.trim();
-            if (!loc) { showToast("請輸入地點"); return; }
+            countEl.innerText = `${data.length} 項目`;
             
-            const statusDiv = document.getElementById('food-status');
-            const statusText = document.getElementById('status-text');
-            statusDiv.classList.remove('hidden');
-            statusText.innerText = `正在搜尋「${loc}」附近的 4.0+ 餐廳...`;
-
-            const prompt = `地點：${loc}。請根據您的知識，尋找該地區步行距離內知名且 Google 評分 4.0 以上的 5 間餐廳。以 JSON 回傳陣列 { "restaurants": [{ "name", "rating", "cuisine", "distance", "reason", "address" }] }。請使用繁體中文回傳。`;
-            await fetchAndRenderFood(prompt);
-            statusDiv.classList.add('hidden');
-        }
-
-        async function fetchAndRenderFood(prompt) {
-            const resultsDiv = document.getElementById('food-results');
-            try {
-                const result = await callGemini({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
-                const data = JSON.parse(result.candidates[0].content.parts[0].text);
-                resultsDiv.innerHTML = data.restaurants.map(r => `
-                    <div class="bg-white p-4 rounded-2xl custom-shadow border border-ramune/10 relative">
-                        <span class="absolute top-0 right-0 bg-ramune/10 text-ramune px-3 py-1 rounded-bl-xl font-bold text-[10px]">★ ${r.rating}</span>
-                        <h4 class="font-bold text-sm mb-1">${r.name}</h4>
-                        <p class="text-[10px] text-earth mb-2">${r.cuisine} • ${r.distance}</p>
-                        <p class="text-[10px] italic text-earth mb-3">「${r.reason}」</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name + ' ' + r.address)}" target="_blank" class="block text-center bg-ramune text-white py-2 rounded-xl text-[10px] font-bold">查看地圖位置</a>
-                    </div>`).join('');
-            } catch (e) { 
-                resultsDiv.innerHTML = `<p class="text-center text-xs py-10 text-red-400">AI 分析失敗，請稍後再試</p>`; 
+            if (data.length === 0) {
+                container.innerHTML = "";
+                noResults.classList.remove('hidden');
+                return;
             }
+            
+            noResults.classList.add('hidden');
+            container.innerHTML = data.map(item => `
+                <div class="flex items-center justify-between p-4 border-b border-ramune/10 active:bg-accent/30 transition-colors">
+                    <div class="flex-1 min-w-0 pr-3">
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <h4 class="font-bold text-sm text-earth truncate">${item.name || '未命名'}</h4>
+                            <span class="text-[9px] font-bold text-orange-400 bg-orange-50 px-1 py-0.5 rounded">★${item.rating || '0'}</span>
+                        </div>
+                        <p class="text-[10px] text-earth/60 truncate mb-1.5 leading-relaxed">${item.feature || ''}</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-muji text-earth border border-muji">預約: ${item.booking || '未知'}</span>
+                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${(item.walkin && item.walkin.includes('高')) ? 'bg-green-50 text-green-500' : 'bg-orange-50 text-orange-500'}">Walk-in: ${item.walkin || '未知'}</span>
+                        </div>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.name || '') + ' 銀座')}" target="_blank" 
+                       class="w-9 h-9 flex items-center justify-center bg-ramune/10 text-ramune rounded-full shrink-0">
+                       <i class="fa-solid fa-location-arrow text-sm"></i>
+                    </a>
+                </div>
+            `).join('');
         }
 
-        // --- Day 6 AI 建議 ---
-        async function generateDay6Suggestion() {
-            const el = document.getElementById('day6-content');
-            el.innerHTML = `<span class="loading-pulse">✨ 規劃中...</span>`;
-            try {
-                const result = await callGemini({ contents: [{ parts: [{ text: "根據前幾天上野藝術與銀座購物，建議 Day 6 東京行程，繁體中文，100字內。" }] }] });
-                el.innerHTML = `<div class="text-[11px] leading-relaxed text-left p-2 bg-accent/30 rounded-lg">${result.candidates[0].content.parts[0].text}</div>`;
-            } catch (e) { el.innerHTML = "建議生成失敗"; }
-        }
-
-        // --- 記帳辨識 ---
-        let currentPhoto = "";
-        function handlePhoto(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 400; canvas.height = (img.height/img.width)*400;
-                        canvas.getContext('2d').drawImage(img, 0, 0, 400, canvas.height);
-                        currentPhoto = canvas.toDataURL('image/jpeg', 0.6);
-                        document.getElementById('photo-status').innerText = "已就緒";
-                        document.getElementById('ai-scan-btn').classList.remove('hidden');
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function scanReceiptWithAI() {
-            const btn = document.getElementById('ai-scan-btn');
-            btn.innerText = "✨ 辨識中...";
-            try {
-                const res = await callGemini({ contents: [{ parts: [{ text: "辨識收據 JSON: {item, amount}" }, { inlineData: { mimeType: "image/jpeg", data: currentPhoto.split(',')[1] } }] }], generationConfig: { responseMimeType: "application/json" } });
-                const data = JSON.parse(res.candidates[0].content.parts[0].text);
-                document.getElementById('exp-item').value = data.item;
-                document.getElementById('exp-amount').value = data.amount;
-                showToast("辨識成功");
-            } catch (e) { showToast("辨識失敗"); } finally { btn.innerText = "✨ AI 辨識收據"; }
-        }
-
-        // --- 基本邏輯 ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            const activeBtn = Array.from(document.querySelectorAll('.bottom-nav-item')).find(btn => btn.getAttribute('onclick').includes(id));
+            if(activeBtn) activeBtn.classList.add('active');
             window.scrollTo(0,0);
         }
-
-        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.opacity = '1'; setTimeout(() => t.style.opacity = '0', 2000); }
 
         function calculateRate() {
             const exp = document.getElementById('calc-input').value;
@@ -427,20 +276,12 @@
         }
 
         let expenses = JSON.parse(localStorage.getItem('travel_expenses') || '[]');
-        function saveExpense() {
-            const item = document.getElementById('exp-item').value, amt = document.getElementById('exp-amount').value;
-            if(!item || !amt) return;
-            expenses.unshift({ item, amount: parseFloat(amt), date: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
-            localStorage.setItem('travel_expenses', JSON.stringify(expenses));
-            renderExpenses();
-            document.getElementById('exp-item').value = "";
-            document.getElementById('exp-amount').value = "";
-        }
-
         function renderExpenses() {
-            document.getElementById('expense-list').innerHTML = expenses.map(e => `
+            const container = document.getElementById('expense-list');
+            if(!container) return;
+            container.innerHTML = expenses.map(e => `
                 <div class="bg-white p-4 rounded-2xl custom-shadow flex justify-between items-center">
-                    <div><p class="font-bold text-sm">${e.item}</p><p class="text-[10px] text-earth">${e.date}</p></div>
+                    <div><p class="font-bold text-sm text-earth">${e.item}</p><p class="text-[10px] text-earth/50">${e.date}</p></div>
                     <p class="font-bold text-ramune text-lg">¥${e.amount.toLocaleString()}</p>
                 </div>`).join('');
         }
@@ -448,22 +289,31 @@
         const checklist = ["護照", "Visit Japan Web", "日幣現金", "eSim", "充電線", "常備藥"];
         let checks = JSON.parse(localStorage.getItem('travel_checklist') || '{}');
         function renderChecklist() {
-            document.getElementById('checklist-container').innerHTML = checklist.map((item, idx) => `
+            const container = document.getElementById('checklist-container');
+            if(!container) return;
+            container.innerHTML = checklist.map((item, idx) => `
                 <div class="flex items-center gap-3">
                     <input type="checkbox" id="c-${idx}" ${checks[idx]?'checked':''} onchange="toggle(${idx})" class="accent-ramune">
-                    <label for="c-${idx}" class="text-sm ${checks[idx]?'line-through opacity-50':''}">${item}</label>
+                    <label for="c-${idx}" class="text-sm ${checks[idx]?'line-through opacity-50':''} text-earth">${item}</label>
                 </div>`).join('');
         }
         function toggle(i) { checks[i] = !checks[i]; localStorage.setItem('travel_checklist', JSON.stringify(checks)); renderChecklist(); }
 
-        function saveMemo() { localStorage.setItem('travel_memo', document.getElementById('memo-input').value); renderMemo(); showToast("備忘錄已儲存"); }
+        function saveMemo() { localStorage.setItem('travel_memo', document.getElementById('memo-input').value); renderMemo(); }
         function renderMemo() {
             const t = localStorage.getItem('travel_memo') || "";
-            document.getElementById('memo-input').value = t;
-            document.getElementById('memo-display').innerText = t;
+            const memoInput = document.getElementById('memo-input');
+            const memoDisplay = document.getElementById('memo-display');
+            if(memoInput) memoInput.value = t;
+            if(memoDisplay) memoDisplay.innerText = t;
         }
 
-        window.onload = () => { renderExpenses(); renderChecklist(); renderMemo(); };
+        window.onload = () => {
+            loadRestaurants(); // 優先從 CSV 載入
+            renderExpenses();
+            renderChecklist();
+            renderMemo();
+        };
     </script>
 </body>
 </html>
