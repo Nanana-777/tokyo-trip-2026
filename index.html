@@ -12,15 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
-        // Tailwind 主題設定
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        ramune: '#A2D2E2',      /* 波子汽水藍 */
-                        muji: '#F5F5F5',        /* 無印灰白 */
-                        earth: '#7F7F7F',       /* 中性灰 */
-                        accent: '#E8F3F6'       /* 淡藍背景 */
+                        ramune: '#A2D2E2',
+                        muji: '#F5F5F5',
+                        earth: '#7F7F7F',
+                        accent: '#E8F3F6'
                     },
                     fontFamily: {
                         sans: ['M PLUS Rounded 1c', 'Noto Sans TC', 'sans-serif']
@@ -45,7 +44,6 @@
 </head>
 <body class="pb-24 font-sans no-scrollbar">
 
-    <!-- 頁首標題 -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-ramune/20 px-6 py-4 flex justify-between items-center">
         <div>
             <h1 class="text-xl font-bold tracking-wider text-ramune uppercase">Tokyo Travel</h1>
@@ -61,61 +59,41 @@
         <!-- 行程規劃分頁 (PLAN) -->
         <section id="plan" class="tab-content active">
             <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">行程規劃</h2>
-
-            <!-- 航班卡片 -->
             <div class="bg-white rounded-2xl p-4 mb-8 custom-shadow border border-ramune/10">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] bg-ramune text-white px-2 py-0.5 rounded font-bold">ZG21</span>
-                    <span class="text-[10px] text-earth uppercase tracking-widest">YVR ➔ NRT</span>
+                <div class="flex justify-between items-center mb-2 text-[10px] font-bold text-ramune">
+                    <span>ZG21</span>
+                    <span class="text-earth uppercase tracking-widest">YVR ➔ NRT</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <div class="text-center">
+                <div class="flex justify-between items-center text-center">
+                    <div>
                         <p class="text-xl font-bold">10:30</p>
                         <p class="text-[10px] text-earth">5/6 AM</p>
                     </div>
-                    <div class="flex-1 px-4 flex flex-col items-center">
+                    <div class="flex-1 px-4">
                         <i class="fa-solid fa-plane text-ramune text-sm"></i>
                         <div class="w-full h-px bg-ramune/30 mt-1"></div>
                     </div>
-                    <div class="text-center">
+                    <div>
                         <p class="text-xl font-bold">12:40</p>
                         <p class="text-[10px] text-earth">6/6 PM</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 時間軸行程 -->
             <div class="relative timeline-line space-y-8">
                 <div class="relative pl-12">
                     <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm text-xs">01</div>
                     <div class="bg-white p-5 rounded-2xl custom-shadow">
                         <h3 class="font-bold text-lg mb-1">Day 1 (6/6) 上野</h3>
-                        <p class="text-xs text-earth mb-3 leading-relaxed">抵達成田 ➔ 搭乘 Skyliner 前往上野 ➔ 住宿：三井花園酒店</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=Ueno+Mitsui+Garden+Hotel" target="_blank" class="block text-center border border-ramune text-ramune py-2 rounded-xl text-[10px] font-bold">
-                            <i class="fa-solid fa-location-arrow mr-1"></i> 開啟 Google Maps 導覽飯店
-                        </a>
+                        <p class="text-xs text-earth mb-3">抵達成田 ➔ 住宿：三井花園酒店</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Ueno+Mitsui+Garden+Hotel" target="_blank" class="block text-center border border-ramune text-ramune py-2 rounded-xl text-[10px] font-bold">導航至飯店</a>
                     </div>
                 </div>
-
                 <div class="relative pl-12">
                     <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm text-xs">03</div>
-                    <div class="bg-white p-5 rounded-2xl border-2 border-ramune/20 shadow-lg shadow-ramune/10">
+                    <div class="bg-white p-5 rounded-2xl border-2 border-ramune/20">
                         <h3 class="font-bold text-lg mb-2 text-orange-400">Day 3 (8/6) 熱海</h3>
-                        <p class="text-xs text-earth mb-3">今日重點：海景溫泉飯店、熱海布丁</p>
-                        <button onclick="switchTab('atami')" class="w-full bg-ramune text-white py-2 rounded-xl text-xs font-bold">
-                             進入熱海專屬分頁 <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm text-xs">04</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <h3 class="font-bold text-lg mb-1">Day 4 (9/6) 銀座</h3>
-                        <p class="text-xs text-earth mb-3">今日重點：購物、名店探索</p>
-                        <button onclick="switchTab('food')" class="w-full border border-ramune text-ramune py-2 rounded-xl text-[10px] font-bold">
-                            查看銀座餐廳清單
-                        </button>
+                        <button onclick="switchTab('atami')" class="w-full bg-ramune text-white py-2 rounded-xl text-xs font-bold">進入熱海分頁</button>
                     </div>
                 </div>
             </div>
@@ -123,35 +101,11 @@
 
         <!-- 熱海專屬分頁 (ATAMI) -->
         <section id="atami" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-orange-300 inline-block mb-6 text-earth">熱海・溫泉時光</h2>
-            <div class="bg-white rounded-3xl overflow-hidden custom-shadow mb-8 border border-orange-100">
-                <div class="p-6">
-                    <h3 class="font-bold text-lg text-orange-400 mb-2">住宿：熱海 LA VISTA</h3>
-                    <ul class="text-xs text-earth space-y-2 leading-relaxed mb-4">
-                        <li>• 全房型皆有海景觀景窗</li>
-                        <li>• 大正浪漫風格裝潢，氣氛極佳</li>
-                        <li>• 頂樓設有露天風呂，可眺望熱海灣</li>
-                    </ul>
-                    <a href="https://www.google.com/maps/search/?api=1&query=La+Vista+Atami+Bay+Resort" target="_blank" class="block text-center bg-orange-400 text-white py-2.5 rounded-xl text-xs font-bold shadow-md shadow-orange-100">
-                        <i class="fa-solid fa-location-dot mr-1"></i> 查看飯店地圖
-                    </a>
-                </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-2xl custom-shadow">
-                <h4 class="font-bold text-sm mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-utensils text-orange-300"></i> 在地美食推薦
-                </h4>
-                <div class="space-y-4 text-xs">
-                    <div class="border-b border-muji pb-3">
-                        <p class="font-bold mb-1">熱海布丁 (熱海プリン)</p>
-                        <p class="text-earth/60">經典排隊名店，牛奶瓶造型非常可愛。</p>
-                    </div>
-                    <div class="border-b border-muji pb-3">
-                        <p class="font-bold mb-1">阿部商店 (溫泉饅頭)</p>
-                        <p class="text-earth/60">站前商店街必嚐，現蒸口感暖呼呼。</p>
-                    </div>
-                </div>
+            <h2 class="text-2xl font-bold border-b-4 border-orange-300 inline-block mb-6 text-earth">熱海・溫泉</h2>
+            <div class="bg-white rounded-3xl overflow-hidden custom-shadow mb-8 p-6">
+                <h3 class="font-bold text-lg text-orange-400 mb-2">熱海 LA VISTA</h3>
+                <p class="text-sm text-earth mb-4 leading-relaxed">全房型望海・大正浪漫風。請務必享受頂樓風呂。</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=La+Vista+Atami" target="_blank" class="block text-center bg-orange-400 text-white py-2.5 rounded-xl text-xs font-bold">開啟飯店地圖</a>
             </div>
         </section>
 
@@ -160,19 +114,17 @@
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block text-earth">美食篩選</h2>
                 <div class="flex flex-col items-end">
-                    <span id="food-count" class="text-[10px] text-earth font-bold bg-white px-2 py-1 rounded-full border border-ramune/20 shadow-sm">0 項目</span>
+                    <span id="food-count" class="text-[10px] text-earth font-bold bg-white px-2 py-1 rounded-full border border-ramune/20">0 項目</span>
                 </div>
             </div>
             
-            <!-- 搜尋與過濾標籤 -->
             <div class="sticky top-[72px] z-20 bg-muji/90 backdrop-blur-sm pb-4">
                 <div class="relative mb-3">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-ramune/50 text-xs"></i>
-                    <input type="text" id="food-search-input" placeholder="搜尋店名、分類、特色或招牌菜..." 
-                        class="w-full bg-white border border-ramune/10 rounded-2xl pl-10 pr-4 py-3 text-sm shadow-sm focus:border-ramune transition-all"
+                    <input type="text" id="food-search-input" placeholder="搜尋店名、分類、特色..." 
+                        class="w-full bg-white border border-ramune/10 rounded-2xl pl-10 pr-4 py-3 text-sm shadow-sm"
                         onkeyup="runFilters()">
                 </div>
-                
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                     <button onclick="setFilterType('all')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune active shadow-sm" id="btn-all">全部</button>
                     <button onclick="setFilterType('walkin')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm" id="btn-walkin">✨ Walk-in 友好</button>
@@ -181,139 +133,76 @@
             </div>
             
             <div id="food-list-container" class="bg-white rounded-3xl custom-shadow overflow-hidden mb-8 min-h-[100px]">
-                <!-- CSV 資料將在此渲染 -->
-                <div class="p-10 text-center text-earth/40 text-xs italic text-loading">載入資料中...</div>
+                <div class="p-10 text-center text-earth/40 text-xs italic">載入資料中...</div>
             </div>
         </section>
 
-        <!-- 旅遊帳本分頁 (WALLET) -->
+        <!-- 旅遊帳本 (WALLET) -->
         <section id="wallet" class="tab-content">
             <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">旅遊帳本</h2>
             <div class="bg-white p-5 rounded-3xl custom-shadow mb-8">
-                <h3 class="font-bold text-sm mb-4 text-earth">匯率換算 (1 JPY = 0.21 TWD)</h3>
-                <div class="space-y-3">
-                    <div class="flex gap-2">
-                        <input type="text" id="calc-input" placeholder="輸入日幣金額 (算式)" class="flex-1 bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                        <button onclick="calculateRate()" class="bg-ramune text-white px-5 rounded-xl font-bold text-xs">計算</button>
-                    </div>
-                    <div id="calc-result" class="hidden text-center p-3 bg-ramune/5 rounded-xl">
-                        <p class="text-xl font-bold text-ramune">約 NT$ <span id="twd-result">0</span></p>
-                    </div>
+                <p class="text-xs font-bold text-earth/50 mb-3">匯率換算 (0.21)</p>
+                <div class="flex gap-2">
+                    <input type="text" id="calc-input" placeholder="輸入日幣金額" class="flex-1 bg-muji border-none rounded-xl px-4 py-3 text-sm">
+                    <button onclick="calculateRate()" class="bg-ramune text-white px-5 rounded-xl font-bold text-xs">計算</button>
                 </div>
+                <div id="calc-result" class="hidden mt-4 text-center p-3 bg-ramune/5 rounded-xl text-xl font-bold text-ramune">約 NT$ <span id="twd-result">0</span></div>
             </div>
-
-            <div class="bg-white p-5 rounded-3xl custom-shadow mb-8 border border-ramune/5">
-                <h3 class="font-bold text-sm mb-4 text-earth">新增一筆支出</h3>
-                <div class="space-y-3">
-                    <input type="text" id="exp-item" placeholder="品項名稱" class="w-full bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                    <div class="flex gap-2">
-                        <input type="number" id="exp-amount" placeholder="日幣金額" class="flex-1 bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                        <button onclick="saveExpense()" class="bg-ramune text-white px-6 rounded-xl font-bold text-sm">儲存</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="expense-list" class="space-y-3 pb-4">
-                <!-- 記帳項目 -->
-            </div>
+            <div id="expense-list" class="space-y-3 pb-4"></div>
         </section>
 
-        <!-- 備忘與清單 (LISTS) -->
+        <!-- 備忘清單 (LISTS) -->
         <section id="lists" class="tab-content">
             <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">備忘清單</h2>
-            <div id="checklist-container" class="bg-white p-6 rounded-3xl custom-shadow mb-8 space-y-4">
-                <!-- 檢查清單 -->
-            </div>
+            <div id="checklist-container" class="bg-white p-6 rounded-3xl custom-shadow mb-8 space-y-4"></div>
             <div class="bg-white p-6 rounded-3xl custom-shadow">
-                <h3 class="font-bold text-sm mb-4 text-earth">個人備註</h3>
-                <textarea id="memo-input" rows="6" placeholder="在此輸入隨手筆記..." class="w-full bg-muji border-none rounded-2xl px-4 py-3 text-sm mb-3 focus:ring-1 focus:ring-ramune"></textarea>
-                <button onclick="saveMemo()" class="w-full bg-ramune text-white py-3 rounded-xl font-bold text-sm">儲存備忘錄</button>
-            </div>
-        </section>
-
-        <!-- 實用資訊 (INFO) -->
-        <section id="info" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">實用資訊</h2>
-            <div class="bg-white p-6 rounded-3xl custom-shadow mb-6">
-                <h3 class="font-bold mb-4 text-red-400 flex items-center gap-2">
-                    <i class="fa-solid fa-phone"></i> 緊急聯絡電話
-                </h3>
-                <div class="space-y-3 text-sm">
-                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-xl">
-                        <span class="text-red-700">警察局 (報案)</span><span class="font-bold text-red-700">110</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-xl">
-                        <span class="text-red-700">消防/救護車</span><span class="font-bold text-red-700">119</span>
-                    </div>
-                    <div class="flex justify-between px-2 pt-2">
-                        <span class="text-earth">台北駐日代表處</span><span class="font-bold">03-3280-7811</span>
-                    </div>
-                </div>
+                <textarea id="memo-input" rows="6" placeholder="在此輸入隨手筆記..." class="w-full bg-muji border-none rounded-2xl px-4 py-3 text-sm mb-3"></textarea>
+                <button onclick="saveMemo()" class="w-full bg-ramune text-white py-3 rounded-xl font-bold text-sm">儲存</button>
             </div>
         </section>
 
     </main>
 
-    <!-- 底部導覽列 -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ramune/10 px-2 py-3 flex justify-between items-center z-50">
-        <button onclick="switchTab('plan')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1 active">
-            <i class="fa-solid fa-calendar-day text-lg"></i><span class="text-[9px] font-bold">行程</span>
-        </button>
-        <button onclick="switchTab('atami')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1">
-            <i class="fa-solid fa-umbrella-beach text-lg"></i><span class="text-[9px] font-bold">熱海</span>
-        </button>
-        <button onclick="switchTab('food')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1">
-            <i class="fa-solid fa-utensils text-lg"></i><span class="text-[9px] font-bold">美食</span>
-        </button>
-        <button onclick="switchTab('wallet')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1">
-            <i class="fa-solid fa-wallet text-lg"></i><span class="text-[9px] font-bold">記帳</span>
-        </button>
-        <button onclick="switchTab('lists')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1">
-            <i class="fa-solid fa-list-check text-lg"></i><span class="text-[9px] font-bold">清單</span>
-        </button>
-        <button onclick="switchTab('info')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1">
-            <i class="fa-solid fa-circle-info text-lg"></i><span class="text-[9px] font-bold">資訊</span>
-        </button>
+        <button onclick="switchTab('plan')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1 active"><i class="fa-solid fa-calendar-day text-lg"></i><span class="text-[9px] font-bold">行程</span></button>
+        <button onclick="switchTab('atami')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-umbrella-beach text-lg"></i><span class="text-[9px] font-bold">熱海</span></button>
+        <button onclick="switchTab('food')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-utensils text-lg"></i><span class="text-[9px] font-bold">美食</span></button>
+        <button onclick="switchTab('wallet')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-wallet text-lg"></i><span class="text-[9px] font-bold">記帳</span></button>
+        <button onclick="switchTab('lists')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-list-check text-lg"></i><span class="text-[9px] font-bold">清單</span></button>
+        <button onclick="switchTab('info')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-circle-info text-lg"></i><span class="text-[9px] font-bold">資訊</span></button>
     </nav>
 
-    <!-- 置頂按鈕 -->
-    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="fixed bottom-24 right-5 w-10 h-10 bg-white border border-ramune/30 text-ramune rounded-full shadow-lg flex items-center justify-center z-40 opacity-80 active:scale-90 transition-all">
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="fixed bottom-24 right-5 w-10 h-10 bg-white border border-ramune/30 text-ramune rounded-full shadow-lg flex items-center justify-center z-40">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
     <script>
-        // 核心資料庫 (若 CSV 載入失敗時的預設範例資料)
-        let allRestaurants = [
-            { name: "東京肉しゃぶ家 秀彬", rating: "4.2 (44)", booking: "必須預約", walkin: "極低", feature: "高端私房菜，通常不接受直接入座。", dish: "頂級和牛涮涮鍋、黑松露壽喜燒。", type: "しゃぶしゃぶ, すき焼き, とんかつ" },
-            { name: "銀座かつかみ", rating: "4.3 (627)", booking: "強烈建議", walkin: "低", feature: "採「套餐制」，座位有限，沒預約很難有位。", dish: "炸豬排品嚐套餐 (Katsu Course)。", type: "とんかつ" }
-        ];
-
+        let allRestaurants = [];
         let currentFilterType = 'all';
 
-        // 載入 CSV (GitHub restaurants.csv)
         async function loadRestaurants() {
             try {
-                // 為了開發預覽，先嘗試讀取。若在本地或 GitHub Pages，請確保路徑正確
                 const response = await fetch('./restaurants.csv');
-                if (!response.ok) throw new Error('CSV file not found');
-                const csvText = await response.text();
+                if (!response.ok) throw new Error('File not found');
+                let csvText = await response.text();
+                
+                // 【核心修復】移除 UTF-8 BOM
+                csvText = csvText.replace(/^\ufeff/, "");
+
                 Papa.parse(csvText, {
                     header: true,
                     skipEmptyLines: true,
+                    transformHeader: h => h.trim().toLowerCase(), // 【核心修復】統一轉小寫並去空白
                     complete: function(results) {
-                        if (results.data && results.data.length > 0) {
-                            allRestaurants = results.data;
-                        }
+                        allRestaurants = results.data;
                         renderFood(allRestaurants);
                     }
                 });
             } catch (e) {
-                console.warn("Using default data because CSV could not be loaded:", e.message);
-                renderFood(allRestaurants);
+                document.getElementById('food-list-container').innerHTML = '<div class="p-10 text-center text-xs">請確保 GitHub 根目錄有 restaurants.csv</div>';
             }
         }
 
-        // 美食過濾功能
         function setFilterType(type) {
             currentFilterType = type;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -327,19 +216,17 @@
             let filtered = allRestaurants;
             
             if (currentFilterType === 'walkin') {
-                // 根據您的資料，Walk-in 友好度為「中」或以上視為較友好
-                filtered = filtered.filter(i => (i.walkin && (i.walkin.includes('高') || i.walkin.includes('中'))));
+                filtered = filtered.filter(i => (i.walkin && (i.walkin.includes('中') || i.walkin.includes('高'))));
             } else if (currentFilterType === 'highscore') {
-                // 解析評分數字 (如 "4.2 (44)" -> 4.2)
-                filtered = filtered.filter(i => parseFloat(i.rating) >= 4.2);
+                filtered = filtered.filter(i => parseFloat(i.rating || 0) >= 4.2);
             }
             
             if (query) {
                 filtered = filtered.filter(i => 
                     (i.name && i.name.toLowerCase().includes(query)) || 
                     (i.feature && i.feature.toLowerCase().includes(query)) ||
-                    (i.dish && i.dish.toLowerCase().includes(query)) ||
-                    (i.type && i.type.toLowerCase().includes(query))
+                    (i.type && i.type.toLowerCase().includes(query)) ||
+                    (i.dish && i.dish.toLowerCase().includes(query))
                 );
             }
             renderFood(filtered);
@@ -350,144 +237,84 @@
             document.getElementById('food-count').innerText = `${data.length} 項目`;
             
             if (data.length === 0) {
-                container.innerHTML = '<div class="p-10 text-center text-earth/50 text-xs italic">找不到符合條件的餐廳</div>';
+                container.innerHTML = '<div class="p-10 text-center text-earth/50 text-xs italic">找不到餐廳</div>';
                 return;
             }
 
-            container.innerHTML = data.map(item => `
+            container.innerHTML = data.map(item => {
+                // 確保讀取到正確的欄位，不論 CSV 是 Name 還是 name
+                const name = item.name || item.Name || "未命名";
+                const rating = item.rating || item.Rating || "0";
+                const feature = item.feature || item.Feature || "";
+                const dish = item.dish || item.Dish || "";
+                const walkin = item.walkin || item.Walkin || "未知";
+                const booking = item.booking || item.Booking || "未知";
+
+                const isFriendly = walkin.includes('高') || walkin.includes('中');
+
+                return `
                 <div class="flex items-center justify-between p-4 border-b border-ramune/10 active:bg-accent/30 transition-colors">
                     <div class="flex-1 min-w-0 pr-3 text-left">
                         <div class="flex items-center gap-2 mb-0.5">
-                            <h4 class="font-bold text-sm text-earth truncate">${item.name || '未命名'}</h4>
-                            <span class="text-[9px] font-bold text-orange-400 bg-orange-50 px-1 py-0.5 rounded">★${item.rating || '0'}</span>
+                            <h4 class="font-bold text-sm text-earth truncate">${name}</h4>
+                            <span class="text-[9px] font-bold text-orange-400 bg-orange-50 px-1 py-0.5 rounded">★${rating}</span>
                         </div>
-                        <p class="text-[10px] text-earth/60 truncate mb-1 leading-relaxed">${item.feature || ''}</p>
-                        <p class="text-[10px] text-ramune font-bold truncate mb-1.5"><i class="fa-solid fa-star text-[8px]"></i> ${item.dish || ''}</p>
+                        <p class="text-[10px] text-earth/60 truncate mb-1 leading-relaxed">${feature}</p>
+                        ${dish ? `<p class="text-[10px] text-ramune font-bold truncate mb-1.5"><i class="fa-solid fa-star text-[8px]"></i> ${dish}</p>` : ''}
                         <div class="flex flex-wrap gap-2">
-                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-muji text-earth border border-muji">預約: ${item.booking || '未知'}</span>
-                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${(item.walkin && (item.walkin.includes('高') || item.walkin.includes('中'))) ? 'bg-green-50 text-green-500' : 'bg-orange-50 text-orange-500'}">Walk-in: ${item.walkin || '未知'}</span>
+                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-muji text-earth border border-muji">預約: ${booking}</span>
+                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${isFriendly ? 'bg-green-50 text-green-500' : 'bg-orange-50 text-orange-500'}">Walk-in: ${walkin}</span>
                         </div>
                     </div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.name || '') + ' 東京')}" target="_blank" class="w-9 h-9 flex items-center justify-center bg-ramune/10 text-ramune rounded-full shrink-0">
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' 東京')}" target="_blank" class="w-9 h-9 flex items-center justify-center bg-ramune/10 text-ramune rounded-full shrink-0">
                        <i class="fa-solid fa-location-arrow text-sm"></i>
                     </a>
-                </div>`).join('');
+                </div>`;
+            }).join('');
         }
 
-        // 分頁切換邏輯
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
             document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
-            const btns = Array.from(document.querySelectorAll('.bottom-nav-item'));
-            const activeBtn = btns.find(btn => btn.getAttribute('onclick').includes(id));
+            const activeBtn = Array.from(document.querySelectorAll('.bottom-nav-item')).find(btn => btn.getAttribute('onclick').includes(id));
             if(activeBtn) activeBtn.classList.add('active');
-            
             window.scrollTo(0,0);
         }
 
-        // 匯率計算
         function calculateRate() {
             const input = document.getElementById('calc-input').value;
-            const resultDiv = document.getElementById('calc-result');
             try {
-                // 安全地評估數學表達式
                 const total = eval(input.replace(/[^-+*/.0-9]/g, ''));
                 if (isNaN(total)) return;
                 document.getElementById('twd-result').innerText = Math.round(total * 0.21).toLocaleString();
-                resultDiv.classList.remove('hidden');
-            } catch (e) {
-                console.log("Calculation error");
-            }
+                document.getElementById('calc-result').classList.remove('hidden');
+            } catch (e) {}
         }
 
-        // 記帳系統
+        function saveMemo() { localStorage.setItem('travel_memo', document.getElementById('memo-input').value); alert("已儲存"); }
+        
         let expenses = JSON.parse(localStorage.getItem('travel_expenses') || '[]');
-        function saveExpense() {
-            const itemInput = document.getElementById('exp-item');
-            const amountInput = document.getElementById('exp-amount');
-            const item = itemInput.value;
-            const amt = amountInput.value;
-            
-            if(!item || !amt) return;
-            
-            expenses.unshift({ 
-                item, 
-                amount: parseFloat(amt), 
-                date: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) 
-            });
-            localStorage.setItem('travel_expenses', JSON.stringify(expenses));
-            renderExpenses();
-            
-            itemInput.value = '';
-            amountInput.value = '';
-        }
-
         function renderExpenses() {
             const list = document.getElementById('expense-list');
-            if (expenses.length === 0) {
-                list.innerHTML = '<p class="text-center py-10 text-earth/40 text-xs italic">尚無支出紀錄</p>';
-                return;
-            }
-            list.innerHTML = expenses.map((e, idx) => `
-                <div class="bg-white p-4 rounded-2xl custom-shadow flex justify-between items-center group">
-                    <div class="text-left">
-                        <p class="font-bold text-sm text-earth">${e.item}</p>
-                        <p class="text-[10px] text-earth/50">${e.date}</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <p class="font-bold text-ramune text-lg">¥${e.amount.toLocaleString()}</p>
-                        <button onclick="deleteExpense(${idx})" class="text-red-200 hover:text-red-400 transition-colors">
-                            <i class="fa-solid fa-circle-xmark"></i>
-                        </button>
-                    </div>
-                </div>`).join('');
+            list.innerHTML = expenses.map(e => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
+                <div class="text-left"><p class="font-bold text-sm text-earth">${e.item}</p></div>
+                <p class="font-bold text-ramune text-lg">¥${e.amount.toLocaleString()}</p>
+            </div>`).join('');
         }
 
-        function deleteExpense(idx) {
-            expenses.splice(idx, 1);
-            localStorage.setItem('travel_expenses', JSON.stringify(expenses));
-            renderExpenses();
-        }
-
-        // 檢查清單
-        const checklistItems = ["護照", "Visit Japan Web 登錄", "日幣現金", "eSim/網卡", "行動電源/充電線", "常備藥物", "雨傘/雨衣"];
+        const checklistItems = ["護照", "Visit Japan Web", "日幣現金", "eSim/網卡", "充電線", "常備藥"];
         let checks = JSON.parse(localStorage.getItem('travel_checklist') || '{}');
         function renderChecklist() {
-            const container = document.getElementById('checklist-container');
-            if(!container) return;
-            container.innerHTML = checklistItems.map((item, idx) => `
-                <div class="flex items-center gap-3 active:opacity-70 transition-opacity">
-                    <input type="checkbox" id="c-${idx}" ${checks[idx]?'checked':''} onchange="toggleCheck(${idx})" class="w-5 h-5 rounded-full border-ramune text-ramune focus:ring-ramune">
-                    <label for="c-${idx}" class="text-sm ${checks[idx]?'line-through opacity-40':'text-earth'} font-medium select-none">${item}</label>
-                </div>`).join('');
+            document.getElementById('checklist-container').innerHTML = checklistItems.map((item, idx) => `
+                <div class="flex items-center gap-3"><input type="checkbox" id="c-${idx}" ${checks[idx]?'checked':''} onchange="toggleCheck(${idx})">
+                <label for="c-${idx}" class="text-sm ${checks[idx]?'line-through opacity-40':''} text-earth">${item}</label></div>`).join('');
         }
-        function toggleCheck(i) {
-            checks[i] = !checks[i];
-            localStorage.setItem('travel_checklist', JSON.stringify(checks));
-            renderChecklist();
-        }
+        function toggleCheck(i) { checks[i]=!checks[i]; localStorage.setItem('travel_checklist', JSON.stringify(checks)); renderChecklist(); }
 
-        // 備忘錄
-        function saveMemo() {
-            const text = document.getElementById('memo-input').value;
-            localStorage.setItem('travel_memo', text);
-            renderMemo();
-            alert("備忘錄已成功儲存到本地。");
-        }
-        function renderMemo() {
-            const text = localStorage.getItem('travel_memo') || "";
-            const el = document.getElementById('memo-input');
-            if (el) el.value = text;
-        }
-
-        // 初始化
         window.onload = () => { 
-            loadRestaurants(); 
-            renderExpenses();
-            renderChecklist();
-            renderMemo();
+            loadRestaurants(); renderExpenses(); renderChecklist(); 
+            document.getElementById('memo-input').value = localStorage.getItem('travel_memo') || "";
         };
     </script>
 </body>
