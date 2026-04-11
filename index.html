@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>東京漫遊之旅 | Travel Handbook</title>
-    
-    <!-- 使用免費的 CDN 資源 -->
+    <title>東京漫遊之旅 | Ginza Foodie</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,304 +17,268 @@
                     colors: {
                         ramune: '#A2D2E2',
                         muji: '#F5F5F5',
-                        earth: '#7F7F7F',
-                        accent: '#E8F3F6'
+                        earth: '#4A4A4A',
+                        tabelog: '#FF9900',
+                        google: '#4285F4',
                     },
-                    fontFamily: {
-                        sans: ['M PLUS Rounded 1c', 'Noto Sans TC', 'sans-serif']
-                    }
+                    fontFamily: { sans: ['M PLUS Rounded 1c', 'Noto Sans TC', 'sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #F5F5F5; color: #4A4A4A; -webkit-tap-highlight-color: transparent; }
-        .tab-content { display: none; }
+        body { background-color: #F8F9FA; color: #4A4A4A; -webkit-tap-highlight-color: transparent; }
+        .tab-content { display: none; animation: fadeIn 0.2s ease-out; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .bottom-nav-item.active { color: #A2D2E2; }
-        .filter-btn.active { background-color: #A2D2E2; color: white; border-color: #A2D2E2; }
-        .custom-shadow { box-shadow: 0 4px 15px rgba(162, 210, 226, 0.15); }
-        .timeline-line::before {
-            content: ''; position: absolute; left: 19px; top: 0; bottom: 0; width: 2px;
-            background: #A2D2E2; opacity: 0.4;
-        }
+        .cat-btn.active { background-color: #A2D2E2; color: white; border-color: #A2D2E2; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .custom-shadow { box-shadow: 0 10px 25px -5px rgba(162, 210, 226, 0.15); }
     </style>
 </head>
-<body class="pb-24 font-sans no-scrollbar">
+<body class="pb-28 font-sans">
 
-    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-ramune/20 px-6 py-4 flex justify-between items-center">
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex justify-between items-center shadow-sm">
         <div>
-            <h1 class="text-xl font-bold tracking-wider text-ramune uppercase">Tokyo Travel</h1>
-            <p class="text-[10px] text-earth">2024.05.06 - 05.12 Handbook</p>
+            <h1 class="text-xl font-bold tracking-tighter text-ramune italic uppercase">Tokyo Food</h1>
+            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Ginza 900+ Database</p>
         </div>
-        <div class="w-10 h-10 bg-ramune rounded-full flex items-center justify-center text-white shadow-lg shadow-ramune/20">
-            <i class="fa-solid fa-plane-departure"></i>
+        <div class="w-10 h-10 bg-ramune/10 rounded-2xl flex items-center justify-center text-ramune shadow-inner">
+            <i class="fa-solid fa-utensils text-lg"></i>
         </div>
     </header>
 
-    <main id="main-content" class="px-5 pt-6">
-        
-        <!-- 行程規劃分頁 (PLAN) -->
-        <section id="plan" class="tab-content active">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">行程規劃</h2>
-            <div class="bg-white rounded-2xl p-4 mb-8 custom-shadow border border-ramune/10">
-                <div class="flex justify-between items-center mb-2 text-[10px] font-bold text-ramune">
-                    <span>ZG21</span>
-                    <span class="text-earth uppercase tracking-widest">YVR ➔ NRT</span>
-                </div>
-                <div class="flex justify-between items-center text-center">
-                    <div>
-                        <p class="text-xl font-bold">10:30</p>
-                        <p class="text-[10px] text-earth">5/6 AM</p>
-                    </div>
-                    <div class="flex-1 px-4">
-                        <i class="fa-solid fa-plane text-ramune text-sm"></i>
-                        <div class="w-full h-px bg-ramune/30 mt-1"></div>
-                    </div>
-                    <div>
-                        <p class="text-xl font-bold">12:40</p>
-                        <p class="text-[10px] text-earth">6/6 PM</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative timeline-line space-y-8">
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm text-xs">01</div>
-                    <div class="bg-white p-5 rounded-2xl custom-shadow">
-                        <h3 class="font-bold text-lg mb-1">Day 1 (6/6) 上野</h3>
-                        <p class="text-xs text-earth mb-3">抵達成田 ➔ 住宿：三井花園酒店</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=Ueno+Mitsui+Garden+Hotel" target="_blank" class="block text-center border border-ramune text-ramune py-2 rounded-xl text-[10px] font-bold">導航至飯店</a>
-                    </div>
-                </div>
-                <div class="relative pl-12">
-                    <div class="absolute left-0 w-10 h-10 bg-white border-2 border-ramune rounded-full flex items-center justify-center z-10 font-bold text-ramune shadow-sm text-xs">03</div>
-                    <div class="bg-white p-5 rounded-2xl border-2 border-ramune/20">
-                        <h3 class="font-bold text-lg mb-2 text-orange-400">Day 3 (8/6) 熱海</h3>
-                        <button onclick="switchTab('atami')" class="w-full bg-ramune text-white py-2 rounded-xl text-xs font-bold">進入熱海分頁</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 熱海專屬分頁 (ATAMI) -->
-        <section id="atami" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-orange-300 inline-block mb-6 text-earth">熱海・溫泉</h2>
-            <div class="bg-white rounded-3xl overflow-hidden custom-shadow mb-8 p-6">
-                <h3 class="font-bold text-lg text-orange-400 mb-2">熱海 LA VISTA</h3>
-                <p class="text-sm text-earth mb-4 leading-relaxed">全房型望海・大正浪漫風。請務必享受頂樓風呂。</p>
-                <a href="https://www.google.com/maps/search/?api=1&query=La+Vista+Atami" target="_blank" class="block text-center bg-orange-400 text-white py-2.5 rounded-xl text-xs font-bold">開啟飯店地圖</a>
-            </div>
-        </section>
-
-        <!-- 美食清單分頁 (FOOD) -->
-        <section id="food" class="tab-content">
+    <main class="px-4 pt-6">
+        <!-- 美食分頁 -->
+        <section id="food" class="tab-content active">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block text-earth">美食篩選</h2>
-                <div class="flex flex-col items-end">
-                    <span id="food-count" class="text-[10px] text-earth font-bold bg-white px-2 py-1 rounded-full border border-ramune/20">0 項目</span>
+                <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block text-earth tracking-tight">餐廳清單</h2>
+                <span id="food-count" class="text-[10px] text-gray-400 font-bold bg-white px-3 py-1 rounded-full border border-gray-100 shadow-sm">0 / 0</span>
+            </div>
+
+            <!-- 搜尋與過濾區 (Sticky) -->
+            <div class="sticky top-[76px] z-20 bg-[#F8F9FA]/95 backdrop-blur-md pb-4 space-y-3">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-ramune/40 text-[10px]"></i>
+                    <input type="text" id="food-search-input" placeholder="搜尋店名、招牌菜、分類..."
+                        class="w-full bg-white border-none rounded-2xl pl-10 pr-4 py-4 text-sm shadow-sm ring-1 ring-black/5 focus:ring-ramune transition-all"
+                        onkeyup="applyAllFilters()">
+                </div>
+
+                <!-- 分類按鈕區 -->
+                <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
+                    <button onclick="setCategory('all')" class="cat-btn shrink-0 px-4 py-2 rounded-xl border border-ramune/10 text-[11px] font-bold bg-white text-gray-400 active" id="cat-all">全部</button>
+                    <button onclick="setCategory('ラーメン')" class="cat-btn shrink-0 px-4 py-2 rounded-xl border border-ramune/10 text-[11px] font-bold bg-white text-gray-400" id="cat-ramen">🍜 ラーメン</button>
+                    <button onclick="setCategory('そば')" class="cat-btn shrink-0 px-4 py-2 rounded-xl border border-ramune/10 text-[11px] font-bold bg-white text-gray-400" id="cat-soba">🥢 そば</button>
+                    <button onclick="setCategory('うどん')" class="cat-btn shrink-0 px-4 py-2 rounded-xl border border-ramune/10 text-[11px] font-bold bg-white text-gray-400" id="cat-udon">🍥 うどん</button>
+                    <button onclick="setCategory('高評分')" class="cat-btn shrink-0 px-4 py-2 rounded-xl border border-orange-100 text-[11px] font-bold bg-orange-50 text-orange-400" id="cat-high">🏆 3.6+</button>
+                </div>
+
+                <!-- 排序選擇器 -->
+                <div class="flex items-center justify-between px-1">
+                    <select id="food-sort" onchange="applyAllFilters()" class="bg-transparent text-[10px] font-bold text-gray-400 border-none focus:ring-0 p-0 cursor-pointer">
+                        <option value="tabelog">按 Tabelog 評分排序</option>
+                        <option value="google">按 Google 評分排序</option>
+                        <option value="reviews">按評論數量排序</option>
+                    </select>
+                    <i class="fa-solid fa-arrow-down-wide-short text-gray-200 text-xs"></i>
                 </div>
             </div>
-            
-            <div class="sticky top-[72px] z-20 bg-muji/90 backdrop-blur-sm pb-4">
-                <div class="relative mb-3">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-ramune/50 text-xs"></i>
-                    <input type="text" id="food-search-input" placeholder="搜尋店名、分類、特色..." 
-                        class="w-full bg-white border border-ramune/10 rounded-2xl pl-10 pr-4 py-3 text-sm shadow-sm"
-                        onkeyup="runFilters()">
-                </div>
-                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                    <button onclick="setFilterType('all')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune active shadow-sm" id="btn-all">全部</button>
-                    <button onclick="setFilterType('walkin')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm" id="btn-walkin">✨ Walk-in 友好</button>
-                    <button onclick="setFilterType('highscore')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full border border-ramune/30 text-[11px] font-bold bg-white text-ramune shadow-sm" id="btn-high">🔥 4.2分以上</button>
-                </div>
-            </div>
-            
-            <div id="food-list-container" class="bg-white rounded-3xl custom-shadow overflow-hidden mb-8 min-h-[100px]">
-                <div class="p-10 text-center text-earth/40 text-xs italic">載入資料中...</div>
+
+            <!-- 資料顯示區域 -->
+            <div id="food-list-container" class="space-y-4 mb-10">
+                <div class="py-20 text-center text-gray-300 italic text-sm">載入資料中...</div>
             </div>
         </section>
 
-        <!-- 旅遊帳本 (WALLET) -->
-        <section id="wallet" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">旅遊帳本</h2>
-            <div class="bg-white p-5 rounded-3xl custom-shadow mb-8">
-                <p class="text-xs font-bold text-earth/50 mb-3">匯率換算 (0.21)</p>
-                <div class="flex gap-2">
-                    <input type="text" id="calc-input" placeholder="輸入日幣金額" class="flex-1 bg-muji border-none rounded-xl px-4 py-3 text-sm">
-                    <button onclick="calculateRate()" class="bg-ramune text-white px-5 rounded-xl font-bold text-xs">計算</button>
-                </div>
-                <div id="calc-result" class="hidden mt-4 text-center p-3 bg-ramune/5 rounded-xl text-xl font-bold text-ramune">約 NT$ <span id="twd-result">0</span></div>
-            </div>
-            <div id="expense-list" class="space-y-3 pb-4"></div>
-        </section>
-
-        <!-- 備忘清單 (LISTS) -->
-        <section id="lists" class="tab-content">
-            <h2 class="text-2xl font-bold border-b-4 border-ramune inline-block mb-6 text-earth">備忘清單</h2>
-            <div id="checklist-container" class="bg-white p-6 rounded-3xl custom-shadow mb-8 space-y-4"></div>
-            <div class="bg-white p-6 rounded-3xl custom-shadow">
-                <textarea id="memo-input" rows="6" placeholder="在此輸入隨手筆記..." class="w-full bg-muji border-none rounded-2xl px-4 py-3 text-sm mb-3"></textarea>
-                <button onclick="saveMemo()" class="w-full bg-ramune text-white py-3 rounded-xl font-bold text-sm">儲存</button>
-            </div>
-        </section>
-
+        <!-- 其他占位分頁 -->
+        <section id="plan" class="tab-content"><h2 class="text-2xl font-bold text-earth px-4 pt-10">行程安排建置中...</h2></section>
+        <section id="wallet" class="tab-content"><h2 class="text-2xl font-bold text-earth px-4 pt-10">記帳本建置中...</h2></section>
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ramune/10 px-2 py-3 flex justify-between items-center z-50">
-        <button onclick="switchTab('plan')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1 active"><i class="fa-solid fa-calendar-day text-lg"></i><span class="text-[9px] font-bold">行程</span></button>
-        <button onclick="switchTab('atami')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-umbrella-beach text-lg"></i><span class="text-[9px] font-bold">熱海</span></button>
-        <button onclick="switchTab('food')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-utensils text-lg"></i><span class="text-[9px] font-bold">美食</span></button>
-        <button onclick="switchTab('wallet')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-wallet text-lg"></i><span class="text-[9px] font-bold">記帳</span></button>
-        <button onclick="switchTab('lists')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-list-check text-lg"></i><span class="text-[9px] font-bold">清單</span></button>
-        <button onclick="switchTab('info')" class="bottom-nav-item flex-1 flex flex-col items-center gap-1"><i class="fa-solid fa-circle-info text-lg"></i><span class="text-[9px] font-bold">資訊</span></button>
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-4 flex justify-between items-center z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.02)]">
+        <button onclick="switchTab('plan')" class="flex flex-col items-center gap-1 text-gray-300 transition-colors">
+            <i class="fa-solid fa-calendar-day text-lg"></i>
+            <span class="text-[9px] font-bold">行程</span>
+        </button>
+        <button onclick="switchTab('food')" class="flex flex-col items-center gap-1 text-ramune transition-colors">
+            <i class="fa-solid fa-bowl-food text-xl"></i>
+            <span class="text-[9px] font-bold font-black">美食</span>
+        </button>
+        <button onclick="switchTab('wallet')" class="flex flex-col items-center gap-1 text-gray-300 transition-colors">
+            <i class="fa-solid fa-wallet text-lg"></i>
+            <span class="text-[9px] font-bold">記帳</span>
+        </button>
     </nav>
-
-    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="fixed bottom-24 right-5 w-10 h-10 bg-white border border-ramune/30 text-ramune rounded-full shadow-lg flex items-center justify-center z-40">
-        <i class="fa-solid fa-arrow-up"></i>
-    </button>
 
     <script>
         let allRestaurants = [];
-        let currentFilterType = 'all';
+        let currentCategory = 'all';
 
+        // 1. 讀取外部 CSV 檔案
         async function loadRestaurants() {
             try {
                 const response = await fetch('./restaurants.csv');
                 if (!response.ok) throw new Error('File not found');
-                let csvText = await response.text();
-                
-                // 【核心修復】移除 UTF-8 BOM
-                csvText = csvText.replace(/^\ufeff/, "");
+                const csvText = await response.text();
 
-                Papa.parse(csvText, {
+                Papa.parse(csvText.replace(/^\ufeff/, ""), {
                     header: true,
                     skipEmptyLines: true,
-                    transformHeader: h => h.trim().toLowerCase(), // 【核心修復】統一轉小寫並去空白
                     complete: function(results) {
-                        allRestaurants = results.data;
-                        renderFood(allRestaurants);
+                        allRestaurants = results.data.map(item => ({
+                            ...item,
+                            tabScore: parseFloat(item.TABELOG評分 || 0),
+                            googScore: parseFloat(item.Google評分 || 0),
+                            reviewCount: parseInt(item.Google評論數 || 0)
+                        }));
+                        applyAllFilters();
                     }
                 });
             } catch (e) {
-                document.getElementById('food-list-container').innerHTML = '<div class="p-10 text-center text-xs">請確保 GitHub 根目錄有 restaurants.csv</div>';
+                document.getElementById('food-list-container').innerHTML = `
+                    <div class="py-20 text-center px-6">
+                        <i class="fa-solid fa-circle-exclamation text-3xl text-red-200 mb-4"></i>
+                        <p class="text-sm text-gray-400 font-bold">找不到 restaurants.csv</p>
+                        <p class="text-[10px] text-gray-300 mt-2 italic">請確保檔案位於相同的資料夾中</p>
+                    </div>`;
             }
         }
 
-        function setFilterType(type) {
-            currentFilterType = type;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            const map = { all: 'btn-all', walkin: 'btn-walkin', highscore: 'btn-high' };
-            document.getElementById(map[type]).classList.add('active');
-            runFilters();
+        // 2. 切換分類功能
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            const btnMap = { 'all': 'cat-all', 'ラーメン': 'cat-ramen', 'そば': 'cat-soba', 'うどん': 'cat-udon', '高評分': 'cat-high' };
+            document.getElementById(btnMap[cat]).classList.add('active');
+            applyAllFilters();
         }
 
-        function runFilters() {
+        // 3. 過濾與排序邏輯
+        function applyAllFilters() {
             const query = document.getElementById('food-search-input').value.toLowerCase();
-            let filtered = allRestaurants;
-            
-            if (currentFilterType === 'walkin') {
-                filtered = filtered.filter(i => (i.walkin && (i.walkin.includes('中') || i.walkin.includes('高'))));
-            } else if (currentFilterType === 'highscore') {
-                filtered = filtered.filter(i => parseFloat(i.rating || 0) >= 4.2);
+            const sortBy = document.getElementById('food-sort').value;
+            let filtered = [...allRestaurants];
+
+            // A. 分類過濾
+            if (currentCategory !== 'all') {
+                if (currentCategory === '高評分') filtered = filtered.filter(i => i.tabScore >= 3.6);
+                else filtered = filtered.filter(i => (i.分類 || "").includes(currentCategory));
             }
-            
+
+            // B. 關鍵字過濾
             if (query) {
-                filtered = filtered.filter(i => 
-                    (i.name && i.name.toLowerCase().includes(query)) || 
-                    (i.feature && i.feature.toLowerCase().includes(query)) ||
-                    (i.type && i.type.toLowerCase().includes(query)) ||
-                    (i.dish && i.dish.toLowerCase().includes(query))
+                filtered = filtered.filter(i =>
+                    (i.店名 || "").toLowerCase().includes(query) ||
+                    (i.招牌菜 || "").toLowerCase().includes(query) ||
+                    (i.分類 || "").toLowerCase().includes(query) ||
+                    (i.餐廳特色 || "").toLowerCase().includes(query)
                 );
             }
+
+            // C. 排序
+            filtered.sort((a, b) => {
+                if (sortBy === 'tabelog') return b.tabScore - a.tabScore;
+                if (sortBy === 'google') return b.googScore - a.googScore;
+                return b.reviewCount - a.reviewCount;
+            });
+
             renderFood(filtered);
         }
 
+        // 4. 渲染 HTML (含排隊情況與預約建議)
         function renderFood(data) {
             const container = document.getElementById('food-list-container');
-            document.getElementById('food-count').innerText = `${data.length} 項目`;
-            
+            document.getElementById('food-count').innerText = `${data.length} / ${allRestaurants.length}`;
+
             if (data.length === 0) {
-                container.innerHTML = '<div class="p-10 text-center text-earth/50 text-xs italic">找不到餐廳</div>';
+                container.innerHTML = `<div class="py-20 text-center text-gray-300 italic text-xs">沒有找到符合的餐廳</div>`;
                 return;
             }
 
-            container.innerHTML = data.map(item => {
-                // 確保讀取到正確的欄位，不論 CSV 是 Name 還是 name
-                const name = item.name || item.Name || "未命名";
-                const rating = item.rating || item.Rating || "0";
-                const feature = item.feature || item.Feature || "";
-                const dish = item.dish || item.Dish || "";
-                const walkin = item.walkin || item.Walkin || "未知";
-                const booking = item.booking || item.Booking || "未知";
+            container.innerHTML = data.map(item => `
+                <div class="bg-white rounded-[2rem] p-5 custom-shadow border border-gray-50 active:scale-[0.98] transition-all">
 
-                const isFriendly = walkin.includes('高') || walkin.includes('中');
-
-                return `
-                <div class="flex items-center justify-between p-4 border-b border-ramune/10 active:bg-accent/30 transition-colors">
-                    <div class="flex-1 min-w-0 pr-3 text-left">
-                        <div class="flex items-center gap-2 mb-0.5">
-                            <h4 class="font-bold text-sm text-earth truncate">${name}</h4>
-                            <span class="text-[9px] font-bold text-orange-400 bg-orange-50 px-1 py-0.5 rounded">★${rating}</span>
+                    <!-- 分類與評分欄 -->
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex flex-wrap gap-1 max-w-[65%]">
+                            ${(item.分類 || "").split(',').slice(0, 2).map(c => `
+                                <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-gray-50 text-gray-400 uppercase">${c.trim()}</span>
+                            `).join('')}
                         </div>
-                        <p class="text-[10px] text-earth/60 truncate mb-1 leading-relaxed">${feature}</p>
-                        ${dish ? `<p class="text-[10px] text-ramune font-bold truncate mb-1.5"><i class="fa-solid fa-star text-[8px]"></i> ${dish}</p>` : ''}
-                        <div class="flex flex-wrap gap-2">
-                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-muji text-earth border border-muji">預約: ${booking}</span>
-                            <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${isFriendly ? 'bg-green-50 text-green-500' : 'bg-orange-50 text-orange-500'}">Walk-in: ${walkin}</span>
+                        <div class="flex gap-2 items-center shrink-0">
+                            <div class="flex items-center gap-1">
+                                <span class="w-3.5 h-3.5 bg-tabelog rounded-sm flex items-center justify-center text-[7px] text-white font-black italic">T</span>
+                                <span class="text-xs font-black text-tabelog">${item.tabScore.toFixed(2)}</span>
+                            </div>
+                            <div class="flex items-center gap-1 border-l border-gray-100 pl-2">
+                                <span class="w-3.5 h-3.5 bg-google rounded-sm flex items-center justify-center text-[7px] text-white font-bold">G</span>
+                                <span class="text-xs font-black text-google">${item.googScore.toFixed(1)}</span>
+                            </div>
                         </div>
                     </div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' 東京')}" target="_blank" class="w-9 h-9 flex items-center justify-center bg-ramune/10 text-ramune rounded-full shrink-0">
-                       <i class="fa-solid fa-location-arrow text-sm"></i>
-                    </a>
-                </div>`;
-            }).join('');
+
+                    <!-- 店名與招牌菜 -->
+                    <div class="mb-3">
+                        <h4 class="font-bold text-[17px] text-earth leading-tight mb-1">${item.店名}</h4>
+                        <p class="text-[10px] text-ramune font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-crown text-[8px]"></i> ${item.招牌菜 || '職人推薦'}
+                        </p>
+                    </div>
+
+                    <!-- 預算 (詳細縮小版) -->
+                    <div class="flex items-center gap-3 mb-4 bg-gray-50/60 py-1.5 px-3 rounded-xl w-fit border border-gray-100/50">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-sun text-[9px] text-gray-300"></i>
+                            <span class="text-[10px] font-bold text-gray-500">${item.午餐預算 || '--'}</span>
+                        </div>
+                        <div class="w-[1px] h-2 bg-gray-200"></div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-moon text-[9px] text-gray-300"></i>
+                            <span class="text-[10px] font-bold text-gray-500">${item.晚餐預算 || '--'}</span>
+                        </div>
+                    </div>
+
+                    <!-- 重點：排隊情況與預約建議 -->
+                    <div class="grid grid-cols-1 gap-1.5 mb-4 border-l-2 border-ramune/20 pl-3">
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-clock text-[10px] text-gray-300 mt-0.5"></i>
+                            <p class="text-[10px] text-gray-500 font-medium leading-tight">
+                                <span class="text-gray-400">排隊：</span>${item.排隊情況 || '無需久候'}
+                            </p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-calendar-check text-[10px] text-gray-300 mt-0.5"></i>
+                            <p class="text-[10px] text-orange-400 font-bold leading-tight">
+                                <span class="text-gray-400 font-medium">建議：</span>${item.預約建議 || '現場排隊'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 特色與導航 -->
+                    <div class="flex items-center justify-between gap-4 pt-3 border-t border-dashed border-gray-100">
+                        <p class="text-[10px] text-gray-400 italic leading-snug line-clamp-1 flex-1">${item.餐廳特色 || ''}</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.店名 + ' 東京')}" target="_blank"
+                           class="w-10 h-10 bg-ramune text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-ramune/20">
+                            <i class="fa-solid fa-location-arrow text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
         }
 
+        // 5. 分頁切換功能
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
-            const activeBtn = Array.from(document.querySelectorAll('.bottom-nav-item')).find(btn => btn.getAttribute('onclick').includes(id));
-            if(activeBtn) activeBtn.classList.add('active');
             window.scrollTo(0,0);
         }
 
-        function calculateRate() {
-            const input = document.getElementById('calc-input').value;
-            try {
-                const total = eval(input.replace(/[^-+*/.0-9]/g, ''));
-                if (isNaN(total)) return;
-                document.getElementById('twd-result').innerText = Math.round(total * 0.21).toLocaleString();
-                document.getElementById('calc-result').classList.remove('hidden');
-            } catch (e) {}
-        }
-
-        function saveMemo() { localStorage.setItem('travel_memo', document.getElementById('memo-input').value); alert("已儲存"); }
-        
-        let expenses = JSON.parse(localStorage.getItem('travel_expenses') || '[]');
-        function renderExpenses() {
-            const list = document.getElementById('expense-list');
-            list.innerHTML = expenses.map(e => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                <div class="text-left"><p class="font-bold text-sm text-earth">${e.item}</p></div>
-                <p class="font-bold text-ramune text-lg">¥${e.amount.toLocaleString()}</p>
-            </div>`).join('');
-        }
-
-        const checklistItems = ["護照", "Visit Japan Web", "日幣現金", "eSim/網卡", "充電線", "常備藥"];
-        let checks = JSON.parse(localStorage.getItem('travel_checklist') || '{}');
-        function renderChecklist() {
-            document.getElementById('checklist-container').innerHTML = checklistItems.map((item, idx) => `
-                <div class="flex items-center gap-3"><input type="checkbox" id="c-${idx}" ${checks[idx]?'checked':''} onchange="toggleCheck(${idx})">
-                <label for="c-${idx}" class="text-sm ${checks[idx]?'line-through opacity-40':''} text-earth">${item}</label></div>`).join('');
-        }
-        function toggleCheck(i) { checks[i]=!checks[i]; localStorage.setItem('travel_checklist', JSON.stringify(checks)); renderChecklist(); }
-
-        window.onload = () => { 
-            loadRestaurants(); renderExpenses(); renderChecklist(); 
-            document.getElementById('memo-input').value = localStorage.getItem('travel_memo') || "";
-        };
+        // 初始化
+        window.onload = loadRestaurants;
     </script>
 </body>
 </html>
